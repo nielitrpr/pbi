@@ -1,0 +1,319 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#0a1628;--navy2:#0f2040;--navy3:#162d55;
+    --gold:#c8a951;--gold2:#e8c96a;--gold3:#f5e19a;
+    --red:#e03c3c;--green:#2ebd7a;--amber:#f59e0b;--blue:#3b82f6;
+    --text:#e8eaf0;--muted:#8899aa;--border:rgba(200,169,81,0.2);
+  }
+  body{background:var(--navy);color:var(--text);font-family:'Rajdhani',sans-serif}
+  .dash{width:100%;padding:0 0 2rem}
+  .header{background:linear-gradient(135deg,#0a1628 0%,#0f2040 50%,#0d1e3a 100%);border-bottom:2px solid var(--gold);padding:18px 24px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+  .header::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border:1px solid rgba(200,169,81,0.1);border-radius:50%}
+  .header::after{content:'';position:absolute;right:20px;top:20px;width:120px;height:120px;border:1px solid rgba(200,169,81,0.08);border-radius:50%}
+  .logo-wrap{width:72px;height:72px;flex-shrink:0;background:#fff;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;border:2px solid var(--gold)}
+  .logo-wrap img{width:100%;height:100%;object-fit:contain}
+  .header-text{}
+  .header-title{font-size:22px;font-weight:700;color:var(--gold2);letter-spacing:2px;line-height:1.1;text-transform:uppercase}
+  .header-sub{font-size:13px;color:var(--muted);letter-spacing:3px;margin-top:2px;text-transform:uppercase}
+  .header-badge{margin-left:auto;background:rgba(224,60,60,0.15);border:1px solid var(--red);border-radius:6px;padding:6px 14px;text-align:center;z-index:1}
+  .badge-dot{display:inline-block;width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 1.5s infinite;margin-right:6px}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+  .badge-label{font-size:11px;color:var(--red);letter-spacing:2px;text-transform:uppercase;font-weight:600}
+  .badge-val{font-size:20px;font-weight:700;color:var(--text)}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:16px 20px 0}
+  .kpi{background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;position:relative;overflow:hidden}
+  .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+  .kpi.red::before{background:var(--red)}
+  .kpi.gold::before{background:var(--gold)}
+  .kpi.green::before{background:var(--green)}
+  .kpi.blue::before{background:var(--blue)}
+  .kpi-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+  .kpi-val{font-size:28px;font-weight:700;color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1}
+  .kpi-sub{font-size:11px;margin-top:5px}
+  .kpi-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:28px;opacity:0.12}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 20px 0}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:16px 20px 0}
+  .panel{background:var(--navy2);border:1px solid var(--border);border-radius:10px;padding:16px}
+  .panel-title{font-size:12px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .panel-title::before{content:'';display:inline-block;width:3px;height:14px;background:var(--gold);border-radius:2px}
+
+  canvas{display:block}
+
+  .risk-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .risk-label{width:70px;font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+  .risk-track{flex:1;height:8px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden}
+  .risk-fill{height:100%;border-radius:4px}
+  .risk-count{font-size:13px;font-weight:600;font-family:'JetBrains Mono',monospace;min-width:28px;text-align:right}
+
+  .log-table{width:100%;border-collapse:collapse;font-size:12px}
+  .log-table th{color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:500;padding:6px 8px;border-bottom:1px solid var(--border);text-align:left}
+  .log-table td{padding:7px 8px;border-bottom:1px solid rgba(200,169,81,0.06);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px}
+  .log-table tr:hover td{background:rgba(200,169,81,0.04)}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;letter-spacing:1px;font-family:'Rajdhani',sans-serif;font-weight:600}
+  .b-open{background:rgba(224,60,60,0.15);color:var(--red);border:1px solid rgba(224,60,60,0.3)}
+  .b-inv{background:rgba(245,158,11,0.15);color:var(--amber);border:1px solid rgba(245,158,11,0.3)}
+  .b-closed{background:rgba(46,189,122,0.15);color:var(--green);border:1px solid rgba(46,189,122,0.3)}
+  .b-high{background:rgba(224,60,60,0.15);color:var(--red)}
+  .b-med{background:rgba(245,158,11,0.15);color:var(--amber)}
+  .b-low{background:rgba(46,189,122,0.15);color:var(--green)}
+
+  .threat-url{max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--red)}
+  .divider{height:1px;background:var(--border);margin:0 20px}
+  .footer{padding:10px 20px;font-size:10px;color:var(--muted);letter-spacing:1px;text-align:center;text-transform:uppercase}
+</style>
+
+<div class="dash">
+  <div class="header">
+    <div class="logo-wrap">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAIDBD0DASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=" alt="NIELIT Logo" />
+    </div>
+    <div class="header-text">
+      <div class="header-title">Punjab Bureau Of Investigation</div>
+      <div class="header-sub">Cyber Crime Intelligence Dashboard &nbsp;|&nbsp; Confidential</div>
+    </div>
+    <div class="header-badge" style="margin-left:auto;z-index:1">
+      <div><span class="badge-dot"></span><span class="badge-label">Live Intel</span></div>
+      <div class="badge-val">500 Cases</div>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi red">
+      <div class="kpi-label">Total Cases</div>
+      <div class="kpi-val">500</div>
+      <div class="kpi-sub" style="color:var(--red)">171 Open &bull; Active</div>
+      <div class="kpi-icon"><i class="ti ti-file-alert" aria-hidden="true"></i></div>
+    </div>
+    <div class="kpi gold">
+      <div class="kpi-label">Amount Lost</div>
+      <div class="kpi-val">₹1.24Cr</div>
+      <div class="kpi-sub" style="color:var(--gold)">Across all incidents</div>
+      <div class="kpi-icon"><i class="ti ti-cash" aria-hidden="true"></i></div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Network Threats</div>
+      <div class="kpi-val">263</div>
+      <div class="kpi-sub" style="color:var(--green)">52.6% of 500 logs</div>
+      <div class="kpi-icon"><i class="ti ti-shield-x" aria-hidden="true"></i></div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">High-Risk Suspects</div>
+      <div class="kpi-val">71</div>
+      <div class="kpi-sub" style="color:var(--blue)">of 200 profiled</div>
+      <div class="kpi-icon"><i class="ti ti-user-exclamation" aria-hidden="true"></i></div>
+    </div>
+  </div>
+
+  <div class="grid2" style="padding-top:14px">
+    <div class="panel">
+      <div class="panel-title">Crime Type Distribution</div>
+      <div style="position:relative;height:200px"><canvas id="crimeChart" role="img" aria-label="Donut chart of crime types: Identity Theft 132, Ransomware 132, Phishing 124, UPI Fraud 112">Identity Theft 132, Ransomware 132, Phishing 124, UPI Fraud 112</canvas></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px">
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#e03c3c;display:inline-block"></span>Identity Theft 26.4%</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#f59e0b;display:inline-block"></span>Ransomware 26.4%</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#3b82f6;display:inline-block"></span>Phishing 24.8%</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#2ebd7a;display:inline-block"></span>UPI Fraud 22.4%</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Case Status Overview</div>
+      <div style="position:relative;height:200px"><canvas id="statusChart" role="img" aria-label="Bar chart: Closed 186, Open 171, Under Investigation 143">Closed 186, Open 171, Under Investigation 143</canvas></div>
+    </div>
+  </div>
+
+  <div class="grid2" style="padding-top:14px">
+    <div class="panel">
+      <div class="panel-title">Geographic Distribution</div>
+      <div style="position:relative;height:200px"><canvas id="geoChart" role="img" aria-label="Horizontal bar chart of locations: Chandigarh 138, Mumbai 130, Delhi 120, Bangalore 112">Chandigarh 138, Mumbai 130, Delhi 120, Bangalore 112</canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Network Threat Signals</div>
+      <div style="position:relative;height:200px"><canvas id="netChart" role="img" aria-label="Doughnut: Threat flagged 263, Clean traffic 237">Threat 263 Clean 237</canvas></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:10px">
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#e03c3c;display:inline-block"></span>Flagged 52.6%</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#2ebd7a;display:inline-block"></span>Clean 47.4%</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#3b82f6;display:inline-block"></span>403 Blocked: 181</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><span style="width:9px;height:9px;border-radius:2px;background:#f59e0b;display:inline-block"></span>404 Not Found: 147</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid3" style="padding-top:14px">
+    <div class="panel" style="grid-column:span 1">
+      <div class="panel-title">Suspect Risk Levels</div>
+      <div style="margin-top:4px">
+        <div class="risk-bar">
+          <div class="risk-label">High</div>
+          <div class="risk-track"><div class="risk-fill" style="width:71%;background:var(--red)"></div></div>
+          <div class="risk-count" style="color:var(--red)">71</div>
+        </div>
+        <div class="risk-bar">
+          <div class="risk-label">Medium</div>
+          <div class="risk-track"><div class="risk-fill" style="width:65%;background:var(--amber)"></div></div>
+          <div class="risk-count" style="color:var(--amber)">65</div>
+        </div>
+        <div class="risk-bar">
+          <div class="risk-label">Low</div>
+          <div class="risk-track"><div class="risk-fill" style="width:64%;background:var(--green)"></div></div>
+          <div class="risk-count" style="color:var(--green)">64</div>
+        </div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px"><span>Total Suspects</span><span style="color:var(--text);font-family:'JetBrains Mono',monospace">200</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:8px"><span>Avg Age</span><span style="color:var(--text);font-family:'JetBrains Mono',monospace">34 yrs</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted)"><span>Prior Cases &gt;0</span><span style="color:var(--red);font-family:'JetBrains Mono',monospace">136</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="grid-column:span 2">
+      <div class="panel-title">Recent Incident Log</div>
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>Case ID</th>
+            <th>Crime Type</th>
+            <th>Location</th>
+            <th>Device</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>CC0001</td><td>Identity Theft</td><td>Mumbai</td><td>Mobile</td><td>₹6,324</td><td><span class="badge b-open">Open</span></td></tr>
+          <tr><td>CC0002</td><td>Identity Theft</td><td>Chandigarh</td><td>Mobile</td><td>₹40,940</td><td><span class="badge b-inv">Under Inv.</span></td></tr>
+          <tr><td>CC0003</td><td>Phishing</td><td>Bangalore</td><td>Mobile</td><td>₹47,465</td><td><span class="badge b-closed">Closed</span></td></tr>
+          <tr><td>CC0004</td><td>Identity Theft</td><td>Bangalore</td><td>Laptop</td><td>₹32,529</td><td><span class="badge b-inv">Under Inv.</span></td></tr>
+          <tr><td>CC0005</td><td>Ransomware</td><td>Delhi</td><td>Desktop</td><td>₹58,200</td><td><span class="badge b-open">Open</span></td></tr>
+          <tr><td>CC0006</td><td>UPI Fraud</td><td>Chandigarh</td><td>Mobile</td><td>₹12,000</td><td><span class="badge b-closed">Closed</span></td></tr>
+          <tr><td>CC0007</td><td>Phishing</td><td>Mumbai</td><td>Laptop</td><td>₹88,400</td><td><span class="badge b-open">Open</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid2" style="padding-top:14px">
+    <div class="panel">
+      <div class="panel-title">Flagged Network URLs</div>
+      <table class="log-table">
+        <thead>
+          <tr><th>IP Address</th><th>URL</th><th>Code</th><th>Bytes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>192.168.43.133</td><td class="threat-url">upi-fraud.net</td><td style="color:var(--amber)">404</td><td>650</td></tr>
+          <tr><td>192.168.164.92</td><td class="threat-url">fakebank.com</td><td style="color:var(--red)">403</td><td>2,627</td></tr>
+          <tr><td>192.168.177.87</td><td class="threat-url">secure-site.com</td><td style="color:var(--green)">200</td><td>3,187</td></tr>
+          <tr><td>192.168.20.67</td><td class="threat-url">normal.com</td><td style="color:var(--amber)">404</td><td>1,280</td></tr>
+          <tr><td>192.168.91.14</td><td class="threat-url">phish-portal.net</td><td style="color:var(--red)">403</td><td>4,512</td></tr>
+          <tr><td>192.168.55.201</td><td class="threat-url">ransom-drop.ru</td><td style="color:var(--red)">403</td><td>980</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">High-Risk Suspects</div>
+      <table class="log-table">
+        <thead>
+          <tr><th>ID</th><th>IP</th><th>Age</th><th>Prior</th><th>Risk</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>S002</td><td>192.168.230.106</td><td>44</td><td>2</td><td><span class="badge b-high">High</span></td></tr>
+          <tr><td>S004</td><td>192.168.98.213</td><td>31</td><td>1</td><td><span class="badge b-high">High</span></td></tr>
+          <tr><td>S003</td><td>192.168.108.223</td><td>45</td><td>0</td><td><span class="badge b-med">Medium</span></td></tr>
+          <tr><td>S001</td><td>192.168.77.130</td><td>25</td><td>0</td><td><span class="badge b-low">Low</span></td></tr>
+          <tr><td>S008</td><td>192.168.44.190</td><td>38</td><td>3</td><td><span class="badge b-high">High</span></td></tr>
+          <tr><td>S011</td><td>192.168.199.72</td><td>29</td><td>1</td><td><span class="badge b-high">High</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="divider" style="margin-top:16px"></div>
+  <div class="footer">Punjab Bureau of Investigation &nbsp;&bull;&nbsp; Cyber Crime Unit &nbsp;&bull;&nbsp; Classified – For Authorized Personnel Only &nbsp;&bull;&nbsp; Powered by NIELIT</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+Chart.defaults.color = '#8899aa';
+Chart.defaults.borderColor = 'rgba(200,169,81,0.1)';
+Chart.defaults.font.family = "'Rajdhani', sans-serif";
+
+new Chart(document.getElementById('crimeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Identity Theft','Ransomware','Phishing','UPI Fraud'],
+    datasets: [{
+      data: [132,132,124,112],
+      backgroundColor: ['#e03c3c','#f59e0b','#3b82f6','#2ebd7a'],
+      borderWidth: 0,
+      hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '68%',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} cases` } } }
+  }
+});
+
+new Chart(document.getElementById('statusChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Closed','Open','Under Investigation'],
+    datasets: [{
+      data: [186,171,143],
+      backgroundColor: ['#2ebd7a','#e03c3c','#f59e0b'],
+      borderRadius: 4, borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { color: '#8899aa', font: { size: 11 } } },
+      y: { grid: { color: 'rgba(200,169,81,0.08)' }, ticks: { color: '#8899aa', font: { size: 11 } }, beginAtZero: true }
+    }
+  }
+});
+
+new Chart(document.getElementById('geoChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Chandigarh','Mumbai','Delhi','Bangalore'],
+    datasets: [{
+      data: [138,130,120,112],
+      backgroundColor: ['#c8a951','#e8c96a','#f5e19a','rgba(200,169,81,0.4)'],
+      borderRadius: 4, borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: 'rgba(200,169,81,0.08)' }, ticks: { color: '#8899aa', font: { size: 11 } }, beginAtZero: true },
+      y: { grid: { display: false }, ticks: { color: '#8899aa', font: { size: 11 } } }
+    }
+  }
+});
+
+new Chart(document.getElementById('netChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Threat Flagged','Clean Traffic'],
+    datasets: [{
+      data: [263,237],
+      backgroundColor: ['#e03c3c','#2ebd7a'],
+      borderWidth: 0, hoverOffset: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '68%',
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } } }
+  }
+});
+</script>
