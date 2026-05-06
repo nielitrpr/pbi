@@ -32,41 +32,22 @@
     --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
   }
 
-  body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-  }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
 
   header {
-    background: var(--accent);
-    color: #fff;
-    padding: 16px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 3px solid var(--accent2);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: var(--accent); color: #fff; padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid var(--accent2); position: sticky; top: 0; z-index: 100;
     box-shadow: 0 2px 12px rgba(30,58,95,0.25);
   }
-
   .header-left { display: flex; align-items: center; gap: 14px; }
-
   .emblem {
-    width: 46px; height: 46px;
-    background: rgba(255,255,255,0.12);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
+    width: 46px; height: 46px; background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.3); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
   }
-
   .header-title { font-size: 16px; font-weight: 600; letter-spacing: 0.01em; }
   .header-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; font-weight: 300; letter-spacing: 0.05em; text-transform: uppercase; }
-
   .header-right { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
 
   .btn {
@@ -82,31 +63,17 @@
 
   .live-badge {
     display: flex; align-items: center; gap: 7px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
     padding: 6px 14px; border-radius: 20px;
-    font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.75);
-    white-space: nowrap;
+    font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.75); white-space: nowrap;
   }
-
   .pulse {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: #4caf50; flex-shrink: 0;
-    box-shadow: 0 0 0 0 rgba(76,175,80,0.6);
-    animation: pulse 2s infinite;
+    width: 8px; height: 8px; border-radius: 50%; background: #4caf50; flex-shrink: 0;
+    box-shadow: 0 0 0 0 rgba(76,175,80,0.6); animation: pulse 2s infinite;
   }
   .pulse.error { background: var(--danger); box-shadow: 0 0 0 0 rgba(185,28,28,0.5); animation-name: pulse-error; }
-
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(76,175,80,0.6); }
-    70% { box-shadow: 0 0 0 8px rgba(76,175,80,0); }
-    100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
-  }
-  @keyframes pulse-error {
-    0% { box-shadow: 0 0 0 0 rgba(185,28,28,0.5); }
-    70% { box-shadow: 0 0 0 6px rgba(185,28,28,0); }
-    100% { box-shadow: 0 0 0 0 rgba(185,28,28,0); }
-  }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(76,175,80,0.6); } 70% { box-shadow: 0 0 0 8px rgba(76,175,80,0); } 100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); } }
+  @keyframes pulse-error { 0% { box-shadow: 0 0 0 0 rgba(185,28,28,0.5); } 70% { box-shadow: 0 0 0 6px rgba(185,28,28,0); } 100% { box-shadow: 0 0 0 0 rgba(185,28,28,0); } }
 
   .main { padding: 24px 32px 32px; max-width: 1440px; margin: 0 auto; }
 
@@ -118,157 +85,88 @@
   .status-left { display: flex; align-items: center; gap: 12px; }
   .countdown { color: var(--accent); font-weight: 500; }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-    gap: 14px;
-    margin-bottom: 24px;
+  .source-tag {
+    font-size: 10px; padding: 2px 8px; border-radius: 4px;
+    font-family: var(--mono); font-weight: 500; letter-spacing: 0.03em;
   }
+  .source-tag.json  { background: #d1fae5; color: #064e3b; }
+  .source-tag.csv   { background: #fef3c7; color: #92400e; }
 
+  .stats-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+    gap: 14px; margin-bottom: 24px;
+  }
   .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: box-shadow 0.2s, transform 0.2s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 20px; position: relative; overflow: hidden;
+    box-shadow: var(--shadow); transition: box-shadow 0.2s, transform 0.2s;
   }
   .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
-
   .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .stat-card.blue::before   { background: var(--accent); }
   .stat-card.orange::before { background: var(--accent2); }
   .stat-card.green::before  { background: var(--accent3); }
   .stat-card.gold::before   { background: var(--gold); }
-
-  .stat-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em;
-    color: var(--muted); font-weight: 500; margin-bottom: 8px;
-  }
-  .stat-value {
-    font-size: 30px; font-weight: 700; font-family: var(--mono); line-height: 1;
-    transition: all 0.3s;
-  }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+  .stat-value { font-size: 30px; font-weight: 700; font-family: var(--mono); line-height: 1; transition: all 0.3s; }
   .stat-card.blue .stat-value   { color: var(--accent); }
   .stat-card.orange .stat-value { color: var(--accent2); }
   .stat-card.green .stat-value  { color: var(--accent3); }
   .stat-card.gold .stat-value   { color: var(--gold); }
-
   .stat-value.flash { animation: flash-val 0.6s ease; }
-  @keyframes flash-val {
-    0%   { opacity: 0.3; transform: scale(0.95); }
-    50%  { opacity: 1;   transform: scale(1.06); }
-    100% { transform: scale(1); }
-  }
-
+  @keyframes flash-val { 0% { opacity: 0.3; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.06); } 100% { transform: scale(1); } }
   .stat-sub { font-size: 11px; color: var(--muted); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
   .stat-delta { font-weight: 600; font-size: 11px; }
-  .stat-delta.up    { color: var(--accent3); }
-  .stat-delta.same  { color: var(--muted); }
+  .stat-delta.up   { color: var(--accent3); }
+  .stat-delta.same { color: var(--muted); }
 
-  .charts-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .chart-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    box-shadow: var(--shadow);
-  }
-
-  .chart-title {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.07em; color: var(--muted); margin-bottom: 14px;
-    display: flex; align-items: center; gap: 6px;
-  }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); }
+  .chart-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
   .chart-title i { font-size: 12px; opacity: 0.5; }
 
-  .table-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    margin-bottom: 24px;
-  }
-
-  .table-toolbar {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; flex-wrap: wrap;
-  }
-
+  .table-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); margin-bottom: 24px; }
+  .table-toolbar { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   .table-toolbar-left { display: flex; align-items: center; gap: 10px; }
-  .table-toolbar-title {
-    font-size: 11px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.07em; color: var(--muted);
-  }
-  .record-count {
-    font-size: 11px; font-family: var(--mono); color: var(--accent);
-    background: rgba(30,58,95,0.06); padding: 2px 8px; border-radius: 4px;
-  }
-
+  .table-toolbar-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+  .record-count { font-size: 11px; font-family: var(--mono); color: var(--accent); background: rgba(30,58,95,0.06); padding: 2px 8px; border-radius: 4px; }
   .table-toolbar-right { display: flex; align-items: center; gap: 8px; }
-
   .search-box {
-    padding: 7px 12px 7px 32px;
-    border: 1px solid var(--border);
-    border-radius: 6px; font-size: 13px; font-family: var(--font);
-    background: var(--bg); color: var(--text); width: 260px;
-    outline: none; transition: border-color 0.15s;
+    padding: 7px 12px 7px 32px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 13px; font-family: var(--font); background: var(--bg); color: var(--text);
+    width: 260px; outline: none; transition: border-color 0.15s;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%236b6860' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.242.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 10px center;
+    background-repeat: no-repeat; background-position: 10px center;
   }
   .search-box:focus { border-color: var(--accent); background-color: #fff; }
   .search-box::placeholder { color: #aaa; }
-
   .icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px; border-radius: 6px;
-    border: 1px solid var(--border); background: var(--bg);
-    cursor: pointer; color: var(--muted); font-size: 13px;
-    transition: all 0.15s;
+    width: 34px; height: 34px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--bg); cursor: pointer; color: var(--muted); font-size: 13px; transition: all 0.15s;
   }
   .icon-btn:hover { border-color: var(--accent); color: var(--accent); background: #fff; }
   .icon-btn:active { transform: scale(0.95); }
 
   .table-wrap { overflow-x: auto; }
-
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-
   th {
-    background: var(--surface2); padding: 10px 14px;
-    text-align: left; font-size: 10px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap; cursor: pointer; user-select: none;
-    transition: background 0.1s;
+    background: var(--surface2); padding: 10px 14px; text-align: left;
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--muted); border-bottom: 1px solid var(--border);
+    white-space: nowrap; cursor: pointer; user-select: none; transition: background 0.1s;
   }
   th:hover { background: #e8e5df; }
   th .sort-icon { margin-left: 4px; font-size: 9px; opacity: 0.4; }
   th.sorted .sort-icon { opacity: 1; color: var(--accent); }
-
   td {
-    padding: 10px 14px; border-bottom: 1px solid var(--border);
-    color: var(--text); max-width: 200px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text);
+    max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(30,58,95,0.02); }
 
-  .badge {
-    display: inline-block; padding: 2px 8px; border-radius: 4px;
-    font-size: 11px; font-weight: 500; font-family: var(--mono);
-  }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; font-family: var(--mono); }
   .badge-m     { background: #dbeafe; color: #1e3a8a; }
   .badge-f     { background: #fce7f3; color: #9d174d; }
   .badge-other { background: #f3f4f6; color: #4b5563; }
@@ -277,12 +175,9 @@
   .pagination {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px 20px; border-top: 1px solid var(--border);
-    font-size: 12px; color: var(--muted); font-family: var(--mono);
-    flex-wrap: wrap; gap: 8px;
+    font-size: 12px; color: var(--muted); font-family: var(--mono); flex-wrap: wrap; gap: 8px;
   }
-
   .page-btns { display: flex; gap: 4px; }
-
   .page-btn {
     padding: 5px 10px; border: 1px solid var(--border); border-radius: 5px;
     background: var(--surface); cursor: pointer; font-size: 12px;
@@ -291,56 +186,36 @@
   .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
   .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .page-btn:disabled { opacity: 0.35; pointer-events: none; }
-
   .per-page-select {
     padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px;
-    font-size: 12px; font-family: var(--mono); background: var(--bg); color: var(--text);
-    cursor: pointer;
+    font-size: 12px; font-family: var(--mono); background: var(--bg); color: var(--text); cursor: pointer;
   }
 
-  .loading {
-    display: flex; align-items: center; justify-content: center;
-    height: 180px; color: var(--muted); font-size: 13px;
-    font-family: var(--mono); gap: 10px;
-  }
-  .spinner {
-    width: 18px; height: 18px; border: 2px solid var(--border);
-    border-top-color: var(--accent); border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+  .loading { display: flex; align-items: center; justify-content: center; height: 180px; color: var(--muted); font-size: 13px; font-family: var(--mono); gap: 10px; }
+  .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .error-box {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 8px; height: 180px;
-    color: var(--muted); font-size: 13px; font-family: var(--mono);
-    text-align: center; padding: 20px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; height: 180px; color: var(--muted); font-size: 13px;
+    font-family: var(--mono); text-align: center; padding: 20px;
   }
   .error-box i { font-size: 28px; color: var(--accent2); }
-  .error-box .hint { font-size: 11px; color: #999; max-width: 440px; line-height: 1.5; }
+  .error-box .hint { font-size: 11px; color: #999; max-width: 460px; line-height: 1.6; }
 
   .toast {
     position: fixed; bottom: 24px; right: 24px;
-    background: var(--accent); color: #fff;
-    padding: 10px 18px; border-radius: 8px;
-    font-size: 13px; font-family: var(--mono);
-    box-shadow: 0 6px 20px rgba(30,58,95,0.3);
-    transform: translateY(80px); opacity: 0;
-    transition: all 0.3s ease; z-index: 200;
+    background: var(--accent); color: #fff; padding: 10px 18px; border-radius: 8px;
+    font-size: 13px; font-family: var(--mono); box-shadow: 0 6px 20px rgba(30,58,95,0.3);
+    transform: translateY(80px); opacity: 0; transition: all 0.3s ease; z-index: 200;
   }
   .toast.show { transform: translateY(0); opacity: 1; }
 
-  footer {
-    text-align: center; padding: 18px;
-    font-size: 11px; font-family: var(--mono); color: var(--muted);
-    border-top: 1px solid var(--border);
-  }
+  footer { text-align: center; padding: 18px; font-size: 11px; font-family: var(--mono); color: var(--muted); border-top: 1px solid var(--border); }
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
-  @media (max-width: 1024px) {
-    .charts-grid { grid-template-columns: 1fr 1fr; }
-  }
+  @media (max-width: 1024px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 700px) {
     header { padding: 12px 16px; flex-wrap: wrap; gap: 10px; }
     .header-title { font-size: 14px; }
@@ -352,7 +227,6 @@
     .table-toolbar-right { width: 100%; }
     .hide-mobile { display: none; }
   }
-
   @media print {
     header { position: static; box-shadow: none; }
     .btn, .icon-btn, .search-box, .pagination, .live-badge { display: none !important; }
@@ -371,7 +245,7 @@
     </div>
   </div>
   <div class="header-right">
-    <button class="btn" id="export-btn" onclick="exportCSV()" title="Download CSV">
+    <button class="btn" onclick="exportCSV()" title="Download CSV">
       <i class="fas fa-download"></i><span class="hide-mobile">Export</span>
     </button>
     <button class="btn" id="refresh-btn" onclick="fetchData()" title="Refresh now">
@@ -387,7 +261,8 @@
 <div class="main">
   <div class="status-bar">
     <div class="status-left">
-      <span id="status-msg">Fetching registration data…</span>
+      <span id="status-msg">Connecting…</span>
+      <span class="source-tag csv" id="source-tag">CSV /pub</span>
       <span class="countdown" id="countdown"></span>
     </div>
     <span id="total-count" style="font-weight:500;"></span>
@@ -419,21 +294,15 @@
   <div class="charts-grid">
     <div class="chart-card">
       <div class="chart-title"><i class="fas fa-venus-mars"></i> Gender Split</div>
-      <div style="position:relative;height:210px;">
-        <canvas id="chartGender" role="img" aria-label="Gender distribution chart"></canvas>
-      </div>
+      <div style="position:relative;height:210px;"><canvas id="chartGender"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="chart-title"><i class="fas fa-graduation-cap"></i> Qualification</div>
-      <div style="position:relative;height:210px;">
-        <canvas id="chartQual" role="img" aria-label="Qualification distribution chart"></canvas>
-      </div>
+      <div style="position:relative;height:210px;"><canvas id="chartQual"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="chart-title"><i class="fas fa-id-badge"></i> Designation</div>
-      <div style="position:relative;height:210px;">
-        <canvas id="chartDesig" role="img" aria-label="Designation distribution chart"></canvas>
-      </div>
+      <div style="position:relative;height:210px;"><canvas id="chartDesig"></canvas></div>
     </div>
   </div>
 
@@ -461,84 +330,108 @@
 <div class="toast" id="toast"></div>
 
 <footer>
-  Data source: <a href="https://docs.google.com/spreadsheets/d/1X_Chv3xMYSZPQokTfH9ft5bI4Pba1fN1H-Uxj8xSXqc" target="_blank" rel="noopener">Google Sheet (Live)</a> ·
-  Auto-refresh every 60s ·
-  NIELIT Ropar ·
-  FutureSkills PRIME ·
-  MeitY ·
-  NASSCOM
+  Data source: Google Sheets (Live) · Auto-refresh every 30s · NIELIT Ropar · FutureSkills PRIME · MeitY · NASSCOM
 </footer>
 
 <script>
-/* ═══════════════════════════════════
-   Use the published /pub URL — this
-   works without any Google login.
-   ═══════════════════════════════════ */
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNfxa5VZ-8AVpLuwKLqFcfGhpgd3blrWz9UzxNozWBVjItXNBjlkvZzPXnNF06VKwIwjUmYvK_FTyf/pub?output=csv";
+/* ═══════════════════════════════════════════════════════════
+   DATA SOURCE CONFIGURATION
 
-const REFRESH_SEC = 60;
+   Option A — Apps Script JSON (RECOMMENDED, zero cache):
+   Paste your Apps Script web app URL here and set
+   DATA_FORMAT to 'json'.
+
+   Option B — Google Visualization gviz (faster than /pub):
+   Uses the sheet ID with /gviz/tq endpoint. Needs
+   "Anyone with link → Viewer" sharing. ~15s cache.
+
+   Option C — /pub CSV (fallback, 5–15 min cache):
+   Original publish URL. Slow cache but no sharing needed.
+   ═══════════════════════════════════════════════════════════ */
+
+const DATA_FORMAT = 'gviz';   // ← Change to 'json' or 'gviz' or 'pub'
+
+/* ── Option A: Apps Script URL (set DATA_FORMAT = 'json') ── */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+
+/* ── Option B: gviz URL (set DATA_FORMAT = 'gviz') ── */
+const SHEET_ID = '1X_Chv3xMYSZPQokTfH9ft5bI4Pba1fN1H-Uxj8xSXqc';
+const GVIZ_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
+/* ── Option C: /pub URL (set DATA_FORMAT = 'pub') ── */
+const PUB_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQNfxa5VZ-8AVpLuwKLqFcfGhpgd3blrWz9UzxNozWBVjItXNBjlkvZzPXnNF06VKwIwjUmYvK_FTyf/pub?output=csv';
+
+
+/* Resolve the active URL based on format choice */
+function getDataSourceURL() {
+  if (DATA_FORMAT === 'json') return APPS_SCRIPT_URL;
+  if (DATA_FORMAT === 'gviz') return GVIZ_URL;
+  return PUB_URL;
+}
+
+const REFRESH_SEC = 30;  // shorter interval with gviz/json
 const PAGE_SIZES  = [25, 50, 100, 200];
 
-/* State */
-let allRows      = [];
-let filteredRows = [];
-let prevTotal    = 0;
-let charts       = {};
-let sortCol      = -1;
-let sortDir      = 1;
-let currentPage  = 1;
-let pageSize     = 50;
-let countdownId  = null;
-let countdownVal = REFRESH_SEC;
+/* ── State ── */
+let allRows = [], filteredRows = [], prevTotal = 0, charts = {};
+let sortCol = -1, sortDir = 1, currentPage = 1, pageSize = 50;
+let countdownId = null, countdownVal = REFRESH_SEC;
 
-/* Column definitions */
 const COLS = [
-  { key: 'Full Name',                              label: 'Name',          w: '170px', numeric: false },
-  { key: 'Father Name',                            label: 'Father',        w: '130px', numeric: false },
-  { key: 'Gender',                                 label: 'Gender',        w: '70px',  numeric: false },
-  { key: 'Qual',                                   label: 'Qualification', w: '150px', numeric: false },
-  { key: 'Designation (if applicable)',            label: 'Designation',   w: '160px', numeric: false },
-  { key: 'Email',                                  label: 'Email',         w: '190px', numeric: false },
-  { key: 'Contact Number',                         label: 'Contact',       w: '120px', numeric: false },
-  { key: 'Timestamp',                              label: 'Registered',    w: '110px', numeric: false },
+  { key: 'Full Name',                              label: 'Name',          w: '170px' },
+  { key: 'Father Name',                            label: 'Father',        w: '130px' },
+  { key: 'Gender',                                 label: 'Gender',        w: '70px'  },
+  { key: 'Qual',                                   label: 'Qualification', w: '150px' },
+  { key: 'Designation (if applicable)',            label: 'Designation',   w: '160px' },
+  { key: 'Email',                                  label: 'Email',         w: '190px' },
+  { key: 'Contact Number',                         label: 'Contact',       w: '120px' },
+  { key: 'Timestamp',                              label: 'Registered',    w: '110px' },
 ];
 
 /* ═══════════════════════════════════
-   ROBUST CSV PARSER
+   PARSERS
    ═══════════════════════════════════ */
 function parseCSV(text) {
   const rows = [];
   let row = [], field = '', inQ = false;
-
   for (let i = 0; i < text.length; i++) {
     const c = text[i], next = text[i + 1];
     if (inQ) {
-      if (c === '"') {
-        if (next === '"') { field += '"'; i++; }
-        else { inQ = false; }
-      } else { field += c; }
+      if (c === '"') { if (next === '"') { field += '"'; i++; } else inQ = false; }
+      else field += c;
     } else {
-      if (c === '"') { inQ = true; }
+      if (c === '"') inQ = true;
       else if (c === ',') { row.push(field); field = ''; }
       else if (c === '\r' && next === '\n') { i++; row.push(field); field = ''; rows.push(row); row = []; }
       else if (c === '\n') { row.push(field); field = ''; rows.push(row); row = []; }
-      else { field += c; }
+      else field += c;
     }
   }
   if (field || row.length) { row.push(field); rows.push(row); }
   if (rows.length < 2) return [];
-
   const headers = rows[0].map(h => h.trim().replace(/^"|"$/g, ''));
-  const nameIdx = headers.indexOf('Full Name');
-
+  const ni = headers.indexOf('Full Name');
   return rows.slice(1)
-    .filter(r => r.length >= headers.length && (r[nameIdx >= 0 ? nameIdx : 0] || '').trim().length > 0)
+    .filter(r => r.length >= headers.length && (r[ni >= 0 ? ni : 0] || '').trim().length > 0)
     .map(r => {
       const obj = {};
       headers.forEach((h, i) => obj[h] = (r[i] || '').trim().replace(/^"|"$/g, ''));
       obj.Qual = normalizeQual(obj['Highest/Current Qualification (with Branch /domain as applicable)'] || '');
       return obj;
     });
+}
+
+function parseJSON(text) {
+  try {
+    const arr = JSON.parse(text);
+    if (!Array.isArray(arr)) return [];
+    return arr.map(obj => {
+      const o = {};
+      for (const k in obj) o[k] = String(obj[k] ?? '');
+      o.Qual = normalizeQual(o['Highest/Current Qualification (with Branch /domain as applicable)'] || '');
+      return o;
+    }).filter(o => (o['Full Name'] || '').trim().length > 0);
+  } catch { return []; }
 }
 
 function normalizeQual(raw) {
@@ -570,117 +463,53 @@ function makeChart(id, type, labels, data, colors) {
   const ctx = document.getElementById(id);
   if (!ctx || !data.length) return;
   const total = data.reduce((a, b) => a + b, 0);
-
   charts[id] = new Chart(ctx, {
-    type,
-    data: {
-      labels,
-      datasets: [{
-        data,
-        backgroundColor: colors,
-        borderColor: type === 'doughnut' ? '#ffffff' : colors,
-        borderWidth: type === 'doughnut' ? 2.5 : 1,
-        borderRadius: type === 'bar' ? 4 : 0,
-        maxBarThickness: 36,
-      }]
-    },
+    type, data: { labels, datasets: [{ data, backgroundColor: colors, borderColor: type === 'doughnut' ? '#ffffff' : colors, borderWidth: type === 'doughnut' ? 2.5 : 1, borderRadius: type === 'bar' ? 4 : 0, maxBarThickness: 36 }] },
     options: {
       responsive: true, maintainAspectRatio: false,
       animation: { duration: 500, easing: 'easeOutQuart' },
       plugins: {
-        legend: {
-          display: type === 'doughnut', position: 'bottom',
-          labels: {
-            font: { size: 11, family: 'IBM Plex Mono' },
-            boxWidth: 10, padding: 10,
-            generateLabels: chart => chart.data.labels.map((l, i) => ({
-              text: `${l}  ${data[i]}  (${total ? Math.round(data[i]/total*100) : 0}%)`,
-              fillStyle: colors[i], strokeStyle: '#fff', lineWidth: 2, index: i,
-            }))
-          }
-        },
-        tooltip: {
-          backgroundColor: 'rgba(26,26,24,0.9)',
-          titleFont: { family: 'IBM Plex Sans', size: 12 },
-          bodyFont: { family: 'IBM Plex Mono', size: 12 },
-          padding: 10,
-          callbacks: { label: c => ` ${c.raw}  (${total ? Math.round(c.raw/total*100) : 0}%)` }
-        }
+        legend: { display: type === 'doughnut', position: 'bottom', labels: { font: { size: 11, family: 'IBM Plex Mono' }, boxWidth: 10, padding: 10, generateLabels: chart => chart.data.labels.map((l, i) => ({ text: `${l}  ${data[i]}  (${total ? Math.round(data[i]/total*100) : 0}%)`, fillStyle: colors[i], strokeStyle: '#fff', lineWidth: 2, index: i })) } },
+        tooltip: { backgroundColor: 'rgba(26,26,24,0.9)', titleFont: { family: 'IBM Plex Sans', size: 12 }, bodyFont: { family: 'IBM Plex Mono', size: 12 }, padding: 10, callbacks: { label: c => ` ${c.raw}  (${total ? Math.round(c.raw/total*100) : 0}%)` } }
       },
-      scales: type === 'bar' ? {
-        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10, family: 'IBM Plex Mono' } }, grid: { color: '#e8e5e0' } },
-        x: { ticks: { font: { size: 9, family: 'IBM Plex Mono' }, maxRotation: 35 }, grid: { display: false } }
-      } : {},
+      scales: type === 'bar' ? { y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10, family: 'IBM Plex Mono' } }, grid: { color: '#e8e5e0' } }, x: { ticks: { font: { size: 9, family: 'IBM Plex Mono' }, maxRotation: 35 }, grid: { display: false } } } : {},
       ...(type === 'doughnut' ? { cutout: '55%' } : {})
     }
   });
 }
 
 function renderCharts(rows) {
-  /* Gender */
-  const gc = {};
-  rows.forEach(r => { const g = r['Gender'] || 'Unknown'; gc[g] = (gc[g] || 0) + 1; });
-  makeChart('chartGender', 'doughnut',
-    Object.keys(gc), Object.values(gc),
-    Object.keys(gc).map(l => {
-      const ll = l.toLowerCase();
-      if (ll === 'male') return '#1e3a5f';
-      if (ll === 'female') return '#c8440a';
-      return '#6b6860';
-    })
-  );
+  const gc = {}; rows.forEach(r => { const g = r['Gender'] || 'Unknown'; gc[g] = (gc[g] || 0) + 1; });
+  makeChart('chartGender', 'doughnut', Object.keys(gc), Object.values(gc), Object.keys(gc).map(l => { const ll = l.toLowerCase(); if (ll === 'male') return '#1e3a5f'; if (ll === 'female') return '#c8440a'; return '#6b6860'; }));
 
-  /* Qualification */
-  const qc = {};
-  rows.forEach(r => { const q = r.Qual || 'Other'; qc[q] = (qc[q] || 0) + 1; });
+  const qc = {}; rows.forEach(r => { const q = r.Qual || 'Other'; qc[q] = (qc[q] || 0) + 1; });
   const qs = Object.entries(qc).sort((a, b) => b[1] - a[1]).slice(0, 7);
-  makeChart('chartQual', 'bar', qs.map(e => e[0]), qs.map(e => e[1]),
-    ['#1e3a5f','#2a5298','#3a6aaa','#4a7fbb','#1a6b3c','#c8440a','#b8860b']);
+  makeChart('chartQual', 'bar', qs.map(e => e[0]), qs.map(e => e[1]), ['#1e3a5f','#2a5298','#3a6aaa','#4a7fbb','#1a6b3c','#c8440a','#b8860b']);
 
-  /* Designation */
-  const dc = {};
-  rows.forEach(r => {
-    let d = (r['Designation (if applicable)'] || 'N/A').trim();
-    if (d.length > 20) d = d.substring(0, 18) + '…';
-    dc[d] = (dc[d] || 0) + 1;
-  });
+  const dc = {}; rows.forEach(r => { let d = (r['Designation (if applicable)'] || 'N/A').trim(); if (d.length > 20) d = d.substring(0, 18) + '…'; dc[d] = (dc[d] || 0) + 1; });
   const ds = Object.entries(dc).sort((a, b) => b[1] - a[1]).slice(0, 7);
-  makeChart('chartDesig', 'bar', ds.map(e => e[0]), ds.map(e => e[1]),
-    ['#c8440a','#d45a1f','#e06f3a','#e88455','#f0a07a','#1a6b3c','#b8860b']);
+  makeChart('chartDesig', 'bar', ds.map(e => e[0]), ds.map(e => e[1]), ['#c8440a','#d45a1f','#e06f3a','#e88455','#f0a07a','#1a6b3c','#b8860b']);
 }
 
 /* ═══════════════════════════════════
    TABLE
    ═══════════════════════════════════ */
-function getPage() {
-  const s = (currentPage - 1) * pageSize;
-  return filteredRows.slice(s, s + pageSize);
-}
+function getPage() { const s = (currentPage - 1) * pageSize; return filteredRows.slice(s, s + pageSize); }
 function totalPages() { return Math.max(1, Math.ceil(filteredRows.length / pageSize)); }
 
 function renderTable() {
   const container = document.getElementById('table-container');
   document.getElementById('record-count').textContent = filteredRows.length + ' of ' + allRows.length;
-
-  if (!filteredRows.length) {
-    container.innerHTML = '<div class="error-box"><i class="fas fa-search"></i>No matching records.<div class="hint">Try a different search term.</div></div>';
-    return;
-  }
+  if (!filteredRows.length) { container.innerHTML = '<div class="error-box"><i class="fas fa-search"></i>No matching records.<div class="hint">Try a different search term.</div></div>'; return; }
 
   const page = getPage();
   let h = '<div class="table-wrap"><table><thead><tr>';
-  COLS.forEach((c, i) => {
-    const sorted = sortCol === i;
-    const arrow  = sorted ? (sortDir === 1 ? '▲' : '▼') : '⇅';
-    h += `<th style="width:${c.w}" class="${sorted?'sorted':''}" onclick="onSort(${i})">${c.label}<span class="sort-icon">${arrow}</span></th>`;
-  });
+  COLS.forEach((c, i) => { const sorted = sortCol === i; h += `<th style="width:${c.w}" class="${sorted?'sorted':''}" onclick="onSort(${i})">${c.label}<span class="sort-icon">${sorted ? (sortDir===1?'▲':'▼') : '⇅'}</span></th>`; });
   h += '</tr></thead><tbody>';
-
   page.forEach(r => {
-    const g = (r['Gender'] || '').toLowerCase();
+    const g = (r['Gender']||'').toLowerCase();
     const gb = g === 'female' ? 'badge-f' : g === 'male' ? 'badge-m' : 'badge-other';
-    const ts = r['Timestamp'] ? r['Timestamp'].replace('T', ' ').split('.')[0].substring(0, 16) : '—';
-
+    const ts = r['Timestamp'] ? r['Timestamp'].replace('T',' ').split('.')[0].substring(0,16) : '—';
     h += `<tr>
       <td><strong>${esc(r['Full Name']||'—')}</strong></td>
       <td style="color:var(--muted)">${esc(r['Father Name']||'—')}</td>
@@ -692,14 +521,9 @@ function renderTable() {
       <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${ts}</td>
     </tr>`;
   });
-
   h += '</tbody></table></div>';
 
-  /* Pagination */
-  const tp = totalPages();
-  const start = (currentPage - 1) * pageSize + 1;
-  const end   = Math.min(currentPage * pageSize, filteredRows.length);
-
+  const tp = totalPages(), start = (currentPage-1)*pageSize+1, end = Math.min(currentPage*pageSize, filteredRows.length);
   h += `<div class="pagination"><div style="display:flex;align-items:center;gap:8px;">
     <span>Rows ${start}–${end} of ${filteredRows.length}</span>
     <select class="per-page-select" onchange="changePageSize(this.value)" aria-label="Rows per page">
@@ -707,17 +531,12 @@ function renderTable() {
     </select></div><div class="page-btns">
     <button class="page-btn" onclick="goPage(1)" ${currentPage===1?'disabled':''}><i class="fas fa-angle-double-left"></i></button>
     <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-angle-left"></i></button>`;
-
-  let pS = Math.max(1, currentPage - 2), pE = Math.min(tp, pS + 4);
-  if (pE - pS < 4) pS = Math.max(1, pE - 4);
-  for (let p = pS; p <= pE; p++) {
-    h += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
-  }
-
+  let pS = Math.max(1, currentPage-2), pE = Math.min(tp, pS+4);
+  if (pE-pS < 4) pS = Math.max(1, pE-4);
+  for (let p = pS; p <= pE; p++) h += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
   h += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}><i class="fas fa-angle-right"></i></button>
     <button class="page-btn" onclick="goPage(${tp})" ${currentPage===tp?'disabled':''}><i class="fas fa-angle-double-right"></i></button>
   </div></div>`;
-
   container.innerHTML = h;
 }
 
@@ -726,40 +545,21 @@ function esc(s) { const d = document.createElement('div'); d.textContent = s; re
 function onSort(i) {
   if (sortCol === i) sortDir *= -1; else { sortCol = i; sortDir = 1; }
   const key = COLS[i].key;
-  filteredRows.sort((a, b) => {
-    const va = (a[key] || '').toLowerCase(), vb = (b[key] || '').toLowerCase();
-    return va < vb ? -1 * sortDir : va > vb ? 1 * sortDir : 0;
-  });
-  currentPage = 1;
-  renderTable();
+  filteredRows.sort((a, b) => { const va = (a[key]||'').toLowerCase(), vb = (b[key]||'').toLowerCase(); return va < vb ? -1*sortDir : va > vb ? 1*sortDir : 0; });
+  currentPage = 1; renderTable();
 }
-
-function goPage(p) {
-  p = Math.max(1, Math.min(p, totalPages()));
-  if (p === currentPage) return;
-  currentPage = p;
-  renderTable();
-  document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
+function goPage(p) { p = Math.max(1, Math.min(p, totalPages())); if (p === currentPage) return; currentPage = p; renderTable(); document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 function changePageSize(v) { pageSize = parseInt(v, 10); currentPage = 1; renderTable(); }
 
 function onSearch() {
   const q = document.getElementById('search-input').value.toLowerCase().trim();
-  filteredRows = q
-    ? allRows.filter(r =>
-        (r['Full Name']||'').toLowerCase().includes(q) ||
-        (r['Father Name']||'').toLowerCase().includes(q) ||
-        (r['Email']||'').toLowerCase().includes(q) ||
-        (r['Designation (if applicable)']||'').toLowerCase().includes(q) ||
-        (r['Contact Number']||'').includes(q) ||
-        (r.Qual||'').toLowerCase().includes(q) ||
-        (r['Gender']||'').toLowerCase().includes(q))
-    : [...allRows];
-  currentPage = 1;
-  renderTable();
+  filteredRows = q ? allRows.filter(r =>
+    (r['Full Name']||'').toLowerCase().includes(q) || (r['Father Name']||'').toLowerCase().includes(q) ||
+    (r['Email']||'').toLowerCase().includes(q) || (r['Designation (if applicable)']||'').toLowerCase().includes(q) ||
+    (r['Contact Number']||'').includes(q) || (r.Qual||'').toLowerCase().includes(q) || (r['Gender']||'').toLowerCase().includes(q)
+  ) : [...allRows];
+  currentPage = 1; renderTable();
 }
-
 function clearSearch() { document.getElementById('search-input').value = ''; onSearch(); }
 
 /* ═══════════════════════════════════
@@ -770,46 +570,31 @@ function exportCSV() {
   const hdrs = Object.keys(allRows[0]).filter(k => k !== 'Qual');
   let csv = hdrs.map(h => `"${h}"`).join(',') + '\n';
   allRows.forEach(r => { csv += hdrs.map(h => `"${(r[h]||'').replace(/"/g,'""')}"`).join(',') + '\n'; });
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }));
   a.download = `FSP_Registrations_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-  showToast('Exported ' + allRows.length + ' records');
+  a.click(); showToast('Exported ' + allRows.length + ' records');
 }
 
 /* ═══════════════════════════════════
    UTILITIES
    ═══════════════════════════════════ */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2800); }
 function startCountdown() {
-  countdownVal = REFRESH_SEC;
-  if (countdownId) clearInterval(countdownId);
-  const el = document.getElementById('countdown');
-  el.textContent = `Refresh in ${countdownVal}s`;
-  countdownId = setInterval(() => {
-    countdownVal--;
-    if (countdownVal <= 0) clearInterval(countdownId);
-    else el.textContent = `Refresh in ${countdownVal}s`;
-  }, 1000);
+  countdownVal = REFRESH_SEC; if (countdownId) clearInterval(countdownId);
+  const el = document.getElementById('countdown'); el.textContent = `Refresh in ${countdownVal}s`;
+  countdownId = setInterval(() => { countdownVal--; if (countdownVal <= 0) clearInterval(countdownId); else el.textContent = `Refresh in ${countdownVal}s`; }, 1000);
 }
-
-function flashStat(id) {
-  const el = document.getElementById(id);
-  el.classList.remove('flash');
-  void el.offsetWidth;
-  el.classList.add('flash');
+function flashStat(id) { const el = document.getElementById(id); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+function updateSourceTag() {
+  const tag = document.getElementById('source-tag');
+  if (DATA_FORMAT === 'json')     { tag.textContent = 'JSON Live'; tag.className = 'source-tag json'; }
+  else if (DATA_FORMAT === 'gviz') { tag.textContent = 'CSV /gviz'; tag.className = 'source-tag csv'; }
+  else                             { tag.textContent = 'CSV /pub';  tag.className = 'source-tag csv'; }
 }
 
 /* ═══════════════════════════════════
-   FETCH — the critical fix:
-   uses /pub?output=csv (your URL)
-   instead of /export?format=csv
+   FETCH
    ═══════════════════════════════════ */
 async function fetchData() {
   const btn = document.getElementById('refresh-btn');
@@ -817,24 +602,26 @@ async function fetchData() {
   document.getElementById('status-msg').textContent = 'Fetching latest data…';
   document.getElementById('last-update').textContent = 'Refreshing…';
   document.getElementById('pulse-dot').classList.remove('error');
+  updateSourceTag();
 
   try {
-    const res = await fetch(CSV_URL + '&_t=' + Date.now(), { cache: 'no-store' });
+    const url = getDataSourceURL() + (DATA_FORMAT !== 'json' ? '&_t=' + Date.now() : '');
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
 
-    if (text.length < 20) throw new Error('Empty response — check publish settings');
+    if (text.length < 10) throw new Error('Empty response');
 
-    allRows = parseCSV(text);
-    if (!allRows.length) throw new Error('Parsed 0 rows — check column headers match');
+    /* Parse based on format */
+    allRows = DATA_FORMAT === 'json' ? parseJSON(text) : parseCSV(text);
+    if (!allRows.length) throw new Error('Parsed 0 rows — check headers match expected columns');
 
-    /* Re-apply current search filter */
     onSearch();
 
-    const total   = allRows.length;
-    const males   = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'male').length;
+    const total = allRows.length;
+    const males = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'male').length;
     const females = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'female').length;
-    const desigs  = new Set(allRows.map(r => (r['Designation (if applicable)']||'').trim().toLowerCase()).filter(Boolean)).size;
+    const desigs = new Set(allRows.map(r => (r['Designation (if applicable)']||'').trim().toLowerCase()).filter(Boolean)).size;
 
     document.getElementById('s-total').textContent  = total;   flashStat('s-total');
     document.getElementById('s-male').textContent   = males;   flashStat('s-male');
@@ -843,11 +630,8 @@ async function fetchData() {
 
     const delta = total - prevTotal;
     const dEl = document.getElementById('s-total-delta');
-    if (prevTotal > 0) {
-      dEl.innerHTML = delta > 0 ? `<span class="stat-delta up">+${delta} new</span>`
-                   : delta === 0 ? `<span class="stat-delta same">No change</span>`
-                   : `<span class="stat-delta" style="color:var(--accent2)">${delta}</span>`;
-    } else { dEl.innerHTML = ''; }
+    if (prevTotal > 0) dEl.innerHTML = delta > 0 ? `<span class="stat-delta up">+${delta} new</span>` : delta === 0 ? `<span class="stat-delta same">No change</span>` : `<span class="stat-delta" style="color:var(--accent2)">${delta}</span>`;
+    else dEl.innerHTML = '';
     prevTotal = total;
 
     document.getElementById('s-male-pct').textContent   = total ? Math.round(males/total*100) + '% of total' : '';
@@ -862,24 +646,22 @@ async function fetchData() {
     renderTable();
     startCountdown();
 
-    if (delta > 0 && prevTotal - delta > 0) showToast('+' + delta + ' new registration' + (delta > 1 ? 's' : ''));
-
   } catch (err) {
     document.getElementById('status-msg').textContent = '⚠ Could not fetch data';
     document.getElementById('last-update').textContent = 'Error';
     document.getElementById('pulse-dot').classList.add('error');
 
     if (!allRows.length) {
+      let hint = '';
+      if (DATA_FORMAT === 'gviz') hint = 'The /gviz endpoint requires "Anyone with the link → Viewer" sharing.<br>Go to Sheet → Share → General access → "Anyone with the link" → Viewer.<br><br>Or switch to <code>DATA_FORMAT = "pub"</code> in the script (slower cache, no sharing needed).';
+      else if (DATA_FORMAT === 'json') hint = 'Check your Apps Script web app URL is correct and deployed.<br>Ensure "Execute as: Me" and "Who has access: Anyone".';
+      else hint = 'Ensure "Publish to web" is active (File → Share → Publish to web → CSV).<br>Note: /pub has a 5–15 min CDN cache. For instant updates, use the Apps Script method.';
+
       document.getElementById('table-container').innerHTML = `
         <div class="error-box">
           <i class="fas fa-exclamation-triangle"></i>
-          <span>Failed to load: ${esc(err.message)}</span>
-          <div class="hint">
-            The /pub URL must return CSV.<br>
-            Go to your Google Sheet → File → Share → Publish to web<br>
-            Select "Entire Document" → Format: CSV → Publish<br>
-            Copy the URL and replace CSV_URL in the script.
-          </div>
+          <span>Failed: ${esc(err.message)}</span>
+          <div class="hint">${hint}</div>
           <button class="btn" style="color:var(--accent);border-color:var(--accent);margin-top:8px;" onclick="fetchData()">
             <i class="fas fa-redo"></i> Retry
           </button>
@@ -887,7 +669,6 @@ async function fetchData() {
     }
     startCountdown();
   }
-
   btn.classList.remove('loading-state');
 }
 
