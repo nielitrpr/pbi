@@ -1,2357 +1,498 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CyberWatch SOC — Threat Intelligence Dashboard</title>
-
-<!-- CDN Imports -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOI Punjab Police — FSP Training Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  /* ============================================================
-     DESIGN SYSTEM — CYBERWATCH SOC
-  ============================================================ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --bg-void:     #020408;
-    --bg-deep:     #040c14;
-    --bg-panel:    #060f1a;
-    --bg-card:     #0a1628;
-    --bg-hover:    #0d1e36;
-    --border-dim:  #0e2035;
-    --border-glow: #0ff;
-    --border-mid:  #1a3a5c;
-
-    --cyan:     #00f5ff;
-    --cyan-dim: #00b8cc;
-    --cyan-ghost: rgba(0,245,255,0.08);
-    --purple:   #b84aff;
-    --purple-dim:#7c2eb0;
-    --purple-ghost: rgba(184,74,255,0.08);
-    --red:      #ff2e4d;
-    --red-dim:  #c0152e;
-    --red-ghost: rgba(255,46,77,0.1);
-    --amber:    #ffb300;
-    --amber-ghost: rgba(255,179,0,0.1);
-    --green:    #00ff88;
-    --green-dim:#00b85e;
-    --green-ghost: rgba(0,255,136,0.08);
-    --blue:     #3a7bd5;
-
-    --text-primary:   #e4eef8;
-    --text-secondary: #6a8aaa;
-    --text-muted:     #374f68;
-    --text-accent:    #00f5ff;
-
-    --font-mono: 'Share Tech Mono', monospace;
-    --font-hud:  'Rajdhani', sans-serif;
-    --font-body: 'Exo 2', sans-serif;
-
-    --sidebar-w: 260px;
-    --topbar-h:  60px;
-    --radius:    8px;
-    --radius-lg: 14px;
-    --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #ddd9d0;
+    --text: #1a1a18;
+    --muted: #6b6860;
+    --accent: #1e3a5f;
+    --accent2: #c8440a;
+    --accent3: #1a6b3c;
+    --gold: #b8860b;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
   }
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-
-  html { scroll-behavior:smooth; }
 
   body {
-    background: var(--bg-void);
-    color: var(--text-primary);
-    font-family: var(--font-body);
-    font-size: 14px;
-    overflow-x: hidden;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
+    padding: 0;
   }
 
-  /* Scrollbar */
-  ::-webkit-scrollbar { width:6px; height:6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-deep); }
-  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius:3px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--cyan-dim); }
-
-  /* ========== ANIMATED BACKGROUND ========== */
-  .bg-grid {
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-    background-image:
-      linear-gradient(rgba(0,245,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,245,255,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: gridDrift 20s linear infinite;
-  }
-  @keyframes gridDrift {
-    0%   { background-position:0 0; }
-    100% { background-position:40px 40px; }
+  header {
+    background: var(--accent);
+    color: #fff;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid var(--accent2);
   }
 
-  .bg-scan {
-    position:fixed; inset:0; z-index:0; pointer-events:none;
-    background: linear-gradient(
-      to bottom,
-      transparent 50%,
-      rgba(0,245,255,0.012) 50%
-    );
-    background-size: 100% 4px;
-    animation: scanlines 8s linear infinite;
-  }
-  @keyframes scanlines { 0%{background-position:0 0;} 100%{background-position:0 100px;} }
+  .header-left { display: flex; align-items: center; gap: 16px; }
 
-  /* ========== LAYOUT ========== */
-  #app { position:relative; z-index:1; display:flex; min-height:100vh; }
-
-  /* ========== SIDEBAR ========== */
-  #sidebar {
-    width: var(--sidebar-w);
-    background: var(--bg-deep);
-    border-right: 1px solid var(--border-dim);
-    display:flex; flex-direction:column;
-    position:fixed; left:0; top:0; bottom:0; z-index:100;
-    transition: var(--transition);
-    overflow-y:auto;
-  }
-  #sidebar.collapsed { width:64px; }
-  #sidebar.mobile-hidden { transform: translateX(-100%); }
-
-  .sidebar-logo {
-    padding:18px 16px;
-    border-bottom: 1px solid var(--border-dim);
-    display:flex; align-items:center; gap:12px;
-    position:sticky; top:0; background:var(--bg-deep); z-index:2;
-  }
-  .logo-icon {
-    width:36px; height:36px; min-width:36px;
-    background: linear-gradient(135deg, var(--cyan), var(--purple));
-    border-radius:8px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:18px; box-shadow: 0 0 20px rgba(0,245,255,0.4);
-  }
-  .logo-text { font-family:var(--font-hud); font-size:18px; font-weight:700;
-    color:var(--text-primary); letter-spacing:1px; white-space:nowrap; }
-  .logo-sub { font-size:10px; color:var(--cyan); letter-spacing:2px; font-family:var(--font-mono); }
-  #sidebar.collapsed .logo-text,
-  #sidebar.collapsed .logo-sub,
-  #sidebar.collapsed .nav-label,
-  #sidebar.collapsed .nav-section-label { display:none; }
-
-  .nav-section-label {
-    font-family:var(--font-mono); font-size:9px; letter-spacing:3px;
-    color:var(--text-muted); padding:16px 16px 6px; text-transform:uppercase;
-  }
-  .nav-item {
-    display:flex; align-items:center; gap:10px;
-    padding:11px 16px; cursor:pointer;
-    border-radius:0; border-left:3px solid transparent;
-    transition:var(--transition); text-decoration:none;
-    color:var(--text-secondary); position:relative;
-  }
-  .nav-item:hover { background:var(--cyan-ghost); color:var(--cyan); border-left-color:var(--cyan); }
-  .nav-item.active { background:var(--cyan-ghost); color:var(--cyan); border-left-color:var(--cyan); }
-  .nav-item i { font-size:18px; min-width:20px; text-align:center; }
-  .nav-label { font-family:var(--font-hud); font-size:14px; font-weight:500; white-space:nowrap; }
-  .nav-badge {
-    margin-left:auto; background:var(--red); color:#fff;
-    font-size:10px; padding:1px 6px; border-radius:20px;
-    font-family:var(--font-mono); min-width:20px; text-align:center;
-  }
-  .nav-badge.green { background:var(--green-dim); }
-  .nav-badge.amber { background:var(--amber); color:#000; }
-
-  /* ========== TOPBAR ========== */
-  #topbar {
-    height:var(--topbar-h); background:var(--bg-panel);
-    border-bottom:1px solid var(--border-dim);
-    display:flex; align-items:center; gap:12px; padding:0 20px;
-    position:fixed; top:0; right:0;
-    left:var(--sidebar-w);
-    z-index:99; transition:var(--transition);
-  }
-  body.sidebar-collapsed #topbar { left:64px; }
-  body.sidebar-hidden #topbar { left:0; }
-
-  .topbar-toggle { 
-    width:36px; height:36px; border:1px solid var(--border-mid);
-    background:transparent; color:var(--text-secondary); border-radius:6px;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    transition:var(--transition); font-size:16px; flex-shrink:0;
-  }
-  .topbar-toggle:hover { border-color:var(--cyan); color:var(--cyan); }
-
-  .topbar-title {
-    font-family:var(--font-hud); font-size:18px; font-weight:600;
-    color:var(--text-primary); letter-spacing:0.5px; flex:1;
-  }
-  .topbar-time {
-    font-family:var(--font-mono); font-size:12px; color:var(--cyan);
-    background:var(--cyan-ghost); border:1px solid rgba(0,245,255,0.2);
-    padding:4px 12px; border-radius:4px;
+  .emblem {
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 600; color: #fff;
   }
 
-  .status-indicator {
-    display:flex; align-items:center; gap:6px;
-    font-family:var(--font-mono); font-size:11px; color:var(--green);
-  }
-  .pulse-dot {
-    width:8px; height:8px; border-radius:50%; background:var(--green);
-    box-shadow:0 0 8px var(--green);
-    animation: pulseAnim 1.5s ease-in-out infinite;
-  }
-  @keyframes pulseAnim {
-    0%,100%{opacity:1; transform:scale(1);}
-    50%{opacity:0.5; transform:scale(0.7);}
+  .header-title { font-size: 17px; font-weight: 600; letter-spacing: 0.01em; }
+  .header-sub { font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 2px; font-weight: 300; letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .live-badge {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 14px; border-radius: 20px;
+    font-size: 12px; font-family: var(--mono); color: rgba(255,255,255,0.85);
   }
 
-  .topbar-search {
-    position:relative; display:flex; align-items:center;
-  }
-  .topbar-search input {
-    background:var(--bg-card); border:1px solid var(--border-mid);
-    color:var(--text-primary); border-radius:6px; padding:7px 12px 7px 32px;
-    font-family:var(--font-mono); font-size:12px; width:200px;
-    transition:var(--transition); outline:none;
-  }
-  .topbar-search input:focus { border-color:var(--cyan); box-shadow:0 0 0 2px rgba(0,245,255,0.12); width:260px; }
-  .topbar-search i { position:absolute; left:10px; color:var(--text-muted); font-size:13px; }
-
-  /* ========== MAIN CONTENT ========== */
-  #main {
-    margin-left:var(--sidebar-w); margin-top:var(--topbar-h);
-    flex:1; padding:24px; transition:var(--transition);
-    min-height:calc(100vh - var(--topbar-h));
-  }
-  body.sidebar-collapsed #main { margin-left:64px; }
-  body.sidebar-hidden #main { margin-left:0; }
-
-  /* ========== PAGES ========== */
-  .page { display:none; }
-  .page.active { display:block; }
-
-  /* ========== GLASS CARDS ========== */
-  .glass-card {
-    background: linear-gradient(135deg, rgba(10,22,40,0.9), rgba(6,15,26,0.95));
-    border:1px solid var(--border-dim);
-    border-radius:var(--radius-lg);
-    backdrop-filter:blur(16px);
-    transition:var(--transition);
-    overflow:hidden; position:relative;
-  }
-  .glass-card::before {
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(135deg, rgba(0,245,255,0.03), transparent 60%);
-    pointer-events:none; border-radius:inherit;
-  }
-  .glass-card:hover { border-color:rgba(0,245,255,0.2); }
-
-  .card-header-line {
-    padding:14px 18px; border-bottom:1px solid var(--border-dim);
-    display:flex; align-items:center; gap:10px;
-  }
-  .card-title {
-    font-family:var(--font-hud); font-size:14px; font-weight:600;
-    color:var(--text-primary); letter-spacing:0.5px; flex:1;
-  }
-  .card-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-  .card-body-pad { padding:18px; }
-
-  /* ========== KPI CARDS ========== */
-  .kpi-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; }
-
-  .kpi-card {
-    padding:20px; position:relative; overflow:hidden;
-    display:flex; flex-direction:column; gap:8px;
-  }
-  .kpi-card::after {
-    content:''; position:absolute; right:-20px; top:-20px;
-    width:80px; height:80px; border-radius:50%;
-    background:radial-gradient(circle, var(--kpi-color,var(--cyan)) 0%, transparent 70%);
-    opacity:0.08; pointer-events:none;
-  }
-  .kpi-label { font-family:var(--font-mono); font-size:10px; letter-spacing:2px;
-    color:var(--text-secondary); text-transform:uppercase; }
-  .kpi-value {
-    font-family:var(--font-hud); font-size:32px; font-weight:700;
-    color:var(--kpi-color,var(--cyan)); line-height:1;
-    text-shadow: 0 0 20px var(--kpi-color,var(--cyan));
-  }
-  .kpi-sub { font-size:11px; color:var(--text-muted); font-family:var(--font-mono); }
-  .kpi-icon { position:absolute; right:16px; bottom:16px; font-size:28px;
-    color:var(--kpi-color,var(--cyan)); opacity:0.15; }
-  .kpi-trend { display:flex; align-items:center; gap:4px; font-size:11px;
-    font-family:var(--font-mono); }
-  .kpi-trend.up { color:var(--red); }
-  .kpi-trend.down { color:var(--green); }
-
-  /* ========== CHART CONTAINERS ========== */
-  .chart-wrap { position:relative; padding:16px; }
-  .chart-wrap canvas { max-height:300px; }
-  .chart-wrap-tall canvas { max-height:380px; }
-
-  /* ========== TABLES ========== */
-  .soc-table { width:100%; border-collapse:collapse; font-family:var(--font-body); font-size:13px; }
-  .soc-table th {
-    background:rgba(0,245,255,0.05); color:var(--cyan);
-    font-family:var(--font-mono); font-size:10px; letter-spacing:2px;
-    padding:10px 14px; text-align:left; border-bottom:1px solid var(--border-dim);
-    white-space:nowrap; text-transform:uppercase;
-  }
-  .soc-table td { padding:9px 14px; border-bottom:1px solid var(--border-dim);
-    color:var(--text-primary); vertical-align:middle; }
-  .soc-table tr:hover td { background:var(--cyan-ghost); }
-  .soc-table tr:last-child td { border-bottom:none; }
-
-  .badge-status {
-    display:inline-flex; align-items:center; gap:5px;
-    padding:3px 10px; border-radius:20px; font-size:11px;
-    font-family:var(--font-mono); font-weight:500; white-space:nowrap;
-  }
-  .badge-open    { background:var(--red-ghost);   color:var(--red);   border:1px solid rgba(255,46,77,0.3); }
-  .badge-closed  { background:var(--green-ghost);  color:var(--green); border:1px solid rgba(0,255,136,0.3); }
-  .badge-invest  { background:var(--amber-ghost);  color:var(--amber); border:1px solid rgba(255,179,0,0.3); }
-  .badge-high    { background:var(--red-ghost);   color:var(--red);   border:1px solid rgba(255,46,77,0.3); }
-  .badge-medium  { background:var(--amber-ghost);  color:var(--amber); border:1px solid rgba(255,179,0,0.3); }
-  .badge-low     { background:var(--green-ghost);  color:var(--green); border:1px solid rgba(0,255,136,0.3); }
-  .badge-threat  { background:var(--red-ghost);   color:var(--red);   border:1px solid rgba(255,46,77,0.3); }
-  .badge-safe    { background:var(--green-ghost);  color:var(--green); border:1px solid rgba(0,255,136,0.3); }
-
-  .ip-chip {
-    font-family:var(--font-mono); font-size:11px; color:var(--cyan-dim);
-    background:rgba(0,245,255,0.06); border:1px solid rgba(0,245,255,0.15);
-    padding:2px 8px; border-radius:4px;
+  .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #4caf50;
+    box-shadow: 0 0 0 0 rgba(76,175,80,0.6);
+    animation: pulse 2s infinite;
   }
 
-  /* ========== ALERT TICKER ========== */
-  #alert-ticker {
-    background:rgba(255,46,77,0.08); border:1px solid rgba(255,46,77,0.2);
-    border-radius:6px; padding:8px 16px;
-    display:flex; align-items:center; gap:12px; overflow:hidden;
-    margin-bottom:20px;
-  }
-  .ticker-label {
-    font-family:var(--font-mono); font-size:10px; letter-spacing:2px;
-    color:var(--red); white-space:nowrap; padding-right:8px;
-    border-right:1px solid rgba(255,46,77,0.3);
-  }
-  .ticker-track { flex:1; overflow:hidden; position:relative; height:20px; }
-  .ticker-inner {
-    position:absolute; white-space:nowrap;
-    font-family:var(--font-mono); font-size:12px; color:var(--text-secondary);
-    animation: tickerScroll 40s linear infinite;
-  }
-  @keyframes tickerScroll { 0%{transform:translateX(100%);} 100%{transform:translateX(-100%);} }
-
-  /* ========== TOAST ========== */
-  #toast-container {
-    position:fixed; bottom:24px; right:24px; z-index:9999;
-    display:flex; flex-direction:column; gap:8px; pointer-events:none;
-  }
-  .toast-item {
-    background:var(--bg-card); border:1px solid var(--border-mid);
-    border-radius:8px; padding:12px 16px; min-width:280px; max-width:360px;
-    display:flex; align-items:flex-start; gap:10px;
-    font-family:var(--font-body); font-size:13px;
-    animation:toastIn 0.3s ease; pointer-events:all;
-    box-shadow:0 8px 32px rgba(0,0,0,0.6);
-  }
-  @keyframes toastIn { from{transform:translateX(100%);opacity:0;} to{transform:translateX(0);opacity:1;} }
-  .toast-item.fading { animation:toastOut 0.3s ease forwards; }
-  @keyframes toastOut { to{transform:translateX(100%);opacity:0;} }
-  .toast-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
-  .toast-title { font-weight:600; color:var(--text-primary); }
-  .toast-msg   { font-size:12px; color:var(--text-secondary); margin-top:2px; }
-  .toast-item.danger  { border-left:3px solid var(--red); }
-  .toast-item.success { border-left:3px solid var(--green); }
-  .toast-item.info    { border-left:3px solid var(--cyan); }
-  .toast-item.warning { border-left:3px solid var(--amber); }
-
-  /* ========== CONTROLS ========== */
-  .ctrl-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  .soc-input {
-    background:var(--bg-card); border:1px solid var(--border-mid);
-    color:var(--text-primary); border-radius:6px; padding:7px 12px;
-    font-family:var(--font-mono); font-size:12px; outline:none;
-    transition:var(--transition);
-  }
-  .soc-input:focus { border-color:var(--cyan); box-shadow:0 0 0 2px rgba(0,245,255,0.1); }
-  .soc-btn {
-    background:transparent; border:1px solid var(--border-mid);
-    color:var(--text-secondary); border-radius:6px; padding:7px 14px;
-    font-family:var(--font-hud); font-size:13px; cursor:pointer;
-    transition:var(--transition); display:inline-flex; align-items:center; gap:6px;
-  }
-  .soc-btn:hover { border-color:var(--cyan); color:var(--cyan); background:var(--cyan-ghost); }
-  .soc-btn.primary { border-color:var(--cyan); color:var(--cyan); background:var(--cyan-ghost); }
-  .soc-btn.danger  { border-color:var(--red);  color:var(--red);  background:var(--red-ghost); }
-
-  .pagination { display:flex; align-items:center; gap:4px; }
-  .page-btn {
-    width:30px; height:30px; border:1px solid var(--border-mid);
-    background:transparent; color:var(--text-secondary); border-radius:4px;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-    font-size:12px; transition:var(--transition);
-  }
-  .page-btn:hover { border-color:var(--cyan); color:var(--cyan); }
-  .page-btn.active { background:var(--cyan-ghost); border-color:var(--cyan); color:var(--cyan); }
-
-  /* ========== UPLOAD ZONE ========== */
-  .upload-zone {
-    border:2px dashed var(--border-mid); border-radius:var(--radius-lg);
-    padding:40px 20px; text-align:center; cursor:pointer;
-    transition:var(--transition); background:var(--bg-card);
-  }
-  .upload-zone:hover, .upload-zone.dragover {
-    border-color:var(--cyan); background:var(--cyan-ghost);
-  }
-  .upload-icon { font-size:48px; color:var(--cyan); opacity:0.5; margin-bottom:12px; }
-  .upload-title { font-family:var(--font-hud); font-size:18px; font-weight:600;
-    color:var(--text-primary); }
-  .upload-sub { font-size:12px; color:var(--text-secondary); margin-top:6px;
-    font-family:var(--font-mono); }
-
-  /* ========== SKELETON LOADER ========== */
-  .skeleton {
-    background:linear-gradient(90deg, var(--bg-card) 25%, var(--bg-hover) 50%, var(--bg-card) 75%);
-    background-size:200% 100%;
-    animation:shimmer 1.5s infinite;
-    border-radius:4px;
-  }
-  @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
-
-  /* ========== TYPING ANIMATION ========== */
-  .typing-text::after {
-    content:'|'; animation:blink 1s step-end infinite;
-    color:var(--cyan); font-weight:100;
-  }
-  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
-
-  /* ========== THREAT CARD ========== */
-  .threat-card {
-    padding:16px; border-left:3px solid var(--kpi-color, var(--red));
-    background:var(--bg-card); border-radius:6px; transition:var(--transition);
-  }
-  .threat-card:hover { background:var(--bg-hover); transform:translateX(4px); }
-  .threat-name { font-family:var(--font-hud); font-size:15px; font-weight:600;
-    color:var(--text-primary); }
-  .threat-meta { font-family:var(--font-mono); font-size:11px; color:var(--text-secondary); margin-top:4px; }
-  .threat-bar-bg { background:var(--bg-deep); border-radius:2px; height:4px; margin-top:10px; }
-  .threat-bar { height:4px; border-radius:2px; background:var(--kpi-color,var(--red));
-    box-shadow:0 0 6px var(--kpi-color,var(--red)); transition:width 1s ease; }
-
-  /* ========== RISK METER ========== */
-  .risk-ring { position:relative; display:inline-flex; align-items:center; justify-content:center; }
-
-  /* ========== SECTION HEADER ========== */
-  .section-header {
-    display:flex; align-items:center; gap:12px; margin-bottom:20px;
-  }
-  .section-header-line {
-    height:2px; background:linear-gradient(90deg, var(--cyan), transparent);
-    flex:1;
-  }
-  .section-title {
-    font-family:var(--font-hud); font-size:22px; font-weight:700;
-    color:var(--text-primary); letter-spacing:0.5px;
-  }
-  .section-title span { color:var(--cyan); }
-
-  /* ========== NETWORK GRAPH ========== */
-  #networkCanvas { width:100%; border-radius:8px; cursor:grab; }
-  #networkCanvas:active { cursor:grabbing; }
-
-  /* ========== MOBILE OVERLAY ========== */
-  #sidebar-overlay {
-    display:none; position:fixed; inset:0; z-index:99;
-    background:rgba(0,0,0,0.7); backdrop-filter:blur(4px);
-  }
-  #sidebar-overlay.active { display:block; }
-
-  /* ========== FULLSCREEN CHART MODAL ========== */
-  #fullscreen-modal {
-    display:none; position:fixed; inset:0; z-index:9998;
-    background:rgba(0,0,0,0.95); backdrop-filter:blur(12px);
-    align-items:center; justify-content:center; padding:24px;
-  }
-  #fullscreen-modal.active { display:flex; }
-  #fullscreen-modal canvas { max-width:100%; max-height:85vh; }
-  .modal-close {
-    position:absolute; top:20px; right:24px;
-    background:var(--red-ghost); border:1px solid var(--red);
-    color:var(--red); border-radius:6px; padding:8px 16px;
-    cursor:pointer; font-family:var(--font-hud); font-size:13px;
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(76,175,80,0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(76,175,80,0); }
+    100% { box-shadow: 0 0 0 0 rgba(76,175,80,0); }
   }
 
-  /* ========== RESPONSIVE ========== */
-  @media (max-width: 992px) {
-    #sidebar { transform:translateX(-100%); }
-    #sidebar.mobile-open { transform:translateX(0); }
-    #topbar { left:0 !important; }
-    #main { margin-left:0 !important; }
-    #sidebar-overlay.active { display:block; }
-    .kpi-grid { grid-template-columns:repeat(2,1fr); }
-  }
-  @media (max-width: 576px) {
-    #main { padding:12px; }
-    .kpi-grid { grid-template-columns:1fr 1fr; }
-    .topbar-search { display:none; }
-    .topbar-time { display:none; }
+  .main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+  .status-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px;
+    font-size: 12px; font-family: var(--mono); color: var(--muted);
   }
 
-  /* ========== CHARTS ROW GRIDS ========== */
-  .charts-2col { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  .charts-3col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; }
-  .charts-13 { display:grid; grid-template-columns:1fr 3fr; gap:20px; }
-  .charts-31 { display:grid; grid-template-columns:3fr 1fr; gap:20px; }
-  @media(max-width:1100px){
-    .charts-2col,.charts-3col,.charts-13,.charts-31 { grid-template-columns:1fr; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
   }
 
-  /* ========== MISC ========== */
-  .glow-cyan { text-shadow:0 0 16px var(--cyan), 0 0 32px var(--cyan); }
-  .glow-red  { text-shadow:0 0 16px var(--red); }
-  .text-cyan  { color:var(--cyan)!important; }
-  .text-red   { color:var(--red)!important; }
-  .text-green { color:var(--green)!important; }
-  .text-amber { color:var(--amber)!important; }
-  .text-purple{ color:var(--purple)!important; }
-  .mb-20 { margin-bottom:20px; }
-  .mt-20 { margin-top:20px; }
-  .table-container { overflow-x:auto; max-height:420px; overflow-y:auto; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .stat-card.blue::before { background: var(--accent); }
+  .stat-card.orange::before { background: var(--accent2); }
+  .stat-card.green::before { background: var(--accent3); }
+  .stat-card.gold::before { background: var(--gold); }
+
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
+  .stat-value { font-size: 32px; font-weight: 600; font-family: var(--mono); line-height: 1; }
+  .stat-card.blue .stat-value { color: var(--accent); }
+  .stat-card.orange .stat-value { color: var(--accent2); }
+  .stat-card.green .stat-value { color: var(--accent3); }
+  .stat-card.gold .stat-value { color: var(--gold); }
+  .stat-sub { font-size: 12px; color: var(--muted); margin-top: 5px; }
+
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .charts-grid { grid-template-columns: 1fr; } .main { padding: 16px; } }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .chart-card.wide { grid-column: span 1; }
+
+  .chart-title {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--muted); margin-bottom: 16px;
+  }
+
+  .table-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .table-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .table-header-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+
+  .search-box {
+    padding: 6px 12px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 13px; font-family: var(--font);
+    background: var(--bg); color: var(--text); width: 220px;
+    outline: none;
+  }
+
+  .search-box:focus { border-color: var(--accent); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+
+  th {
+    background: var(--surface2); padding: 10px 14px;
+    text-align: left; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  td {
+    padding: 11px 14px; border-bottom: 1px solid var(--border);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: var(--text);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 500; font-family: var(--mono);
+  }
+
+  .badge-m { background: #dbeafe; color: #1e3a8a; }
+  .badge-f { background: #fce7f3; color: #9d174d; }
+  .badge-qual { background: #d1fae5; color: #064e3b; }
+
+  .loading {
+    display: flex; align-items: center; justify-content: center;
+    height: 200px; color: var(--muted); font-size: 13px;
+    font-family: var(--mono); gap: 10px;
+  }
+
+  .spinner {
+    width: 18px; height: 18px; border: 2px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .refresh-btn {
+    background: none; border: 1px solid var(--border); cursor: pointer;
+    padding: 5px 12px; border-radius: 6px; font-size: 12px; font-family: var(--mono);
+    color: var(--muted); transition: all 0.15s;
+  }
+
+  .refresh-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .timeline-bar {
+    display: flex; gap: 4px; align-items: flex-end;
+    height: 50px; margin-top: 8px;
+  }
+
+  .tl-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .tl-bar { width: 100%; background: var(--accent); border-radius: 3px 3px 0 0; transition: height 0.4s ease; min-height: 2px; }
+  .tl-label { font-size: 9px; font-family: var(--mono); color: var(--muted); }
+
+  footer {
+    text-align: center; padding: 20px;
+    font-size: 11px; font-family: var(--mono); color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
 </style>
 </head>
 <body>
 
-<!-- Background FX -->
-<div class="bg-grid"></div>
-<div class="bg-scan"></div>
-
-<!-- Toast Container -->
-<div id="toast-container"></div>
-
-<!-- Fullscreen Modal -->
-<div id="fullscreen-modal">
-  <canvas id="fullscreen-canvas"></canvas>
-  <button class="modal-close" onclick="closeFullscreen()"><i class="bi bi-x-lg"></i> CLOSE</button>
-</div>
-
-<!-- Mobile Sidebar Overlay -->
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- App Shell -->
-<div id="app">
-
-  <!-- ===== SIDEBAR ===== -->
-  <nav id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon">⚡</div>
-      <div>
-        <div class="logo-text">CyberWatch</div>
-        <div class="logo-sub">SOC PLATFORM</div>
-      </div>
+<header>
+  <div class="header-left">
+    <div class="emblem">⚖</div>
+    <div>
+      <div class="header-title">FutureSkills PRIME — Training Dashboard</div>
+      <div class="header-sub">Bureau of Investigation · Punjab Police · NIELIT Ropar</div>
     </div>
+  </div>
+  <div style="display:flex;gap:12px;align-items:center;">
+    <button class="refresh-btn" onclick="fetchData()">↻ Refresh</button>
+    <div class="live-badge"><div class="pulse"></div><span id="last-update">Loading…</span></div>
+  </div>
+</header>
 
-    <div class="nav-section-label">OVERVIEW</div>
-    <a class="nav-item active" onclick="showPage('dashboard',this)">
-      <i class="bi bi-grid-1x2-fill"></i><span class="nav-label">Dashboard</span>
-      <span class="nav-badge" id="nb-alerts">0</span>
-    </a>
-    <a class="nav-item" onclick="showPage('upload',this)">
-      <i class="bi bi-cloud-upload-fill"></i><span class="nav-label">Upload Data</span>
-    </a>
-
-    <div class="nav-section-label">THREAT INTEL</div>
-    <a class="nav-item" onclick="showPage('crime-logs',this)">
-      <i class="bi bi-shield-exclamation"></i><span class="nav-label">Crime Logs</span>
-      <span class="nav-badge" id="nb-crimes">0</span>
-    </a>
-    <a class="nav-item" onclick="showPage('network',this)">
-      <i class="bi bi-diagram-3-fill"></i><span class="nav-label">Network Activity</span>
-    </a>
-    <a class="nav-item" onclick="showPage('suspects',this)">
-      <i class="bi bi-person-badge-fill"></i><span class="nav-label">Suspect Profiles</span>
-      <span class="nav-badge amber" id="nb-suspects">0</span>
-    </a>
-
-    <div class="nav-section-label">ANALYTICS</div>
-    <a class="nav-item" onclick="showPage('analytics',this)">
-      <i class="bi bi-bar-chart-line-fill"></i><span class="nav-label">Analytics</span>
-    </a>
-
-    <div style="margin-top:auto; padding:16px; border-top:1px solid var(--border-dim);">
-      <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);letter-spacing:1px;">
-        v2.4.1 — CLASSIFIED
-      </div>
-    </div>
-  </nav>
-
-  <!-- ===== TOPBAR ===== -->
-  <div id="topbar">
-    <button class="topbar-toggle" onclick="toggleSidebar()"><i class="bi bi-list"></i></button>
-    <div class="topbar-title" id="topbar-title">THREAT INTELLIGENCE DASHBOARD</div>
-    <div class="topbar-search">
-      <i class="bi bi-search"></i>
-      <input type="text" id="global-search" placeholder="Search threats, IPs, cases..."/>
-    </div>
-    <div class="status-indicator">
-      <div class="pulse-dot"></div>
-      <span>LIVE</span>
-    </div>
-    <div class="topbar-time" id="clock">--:--:--</div>
+<div class="main">
+  <div class="status-bar">
+    <span id="status-msg">Fetching registration data…</span>
+    <span id="total-count" style="font-weight:500;"></span>
   </div>
 
-  <!-- ===== MAIN ===== -->
-  <main id="main">
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card blue"><div class="stat-label">Total Registrations</div><div class="stat-value" id="s-total">—</div><div class="stat-sub">All participants</div></div>
+    <div class="stat-card green"><div class="stat-label">Male</div><div class="stat-value" id="s-male">—</div><div class="stat-sub">participants</div></div>
+    <div class="stat-card orange"><div class="stat-label">Female</div><div class="stat-value" id="s-female">—</div><div class="stat-sub">participants</div></div>
+    <div class="stat-card gold"><div class="stat-label">Designations</div><div class="stat-value" id="s-desig">—</div><div class="stat-sub">unique roles</div></div>
+  </div>
 
-    <!-- ===========================
-         PAGE: DASHBOARD
-    =========================== -->
-    <div class="page active" id="page-dashboard">
-      <!-- Alert Ticker -->
-      <div id="alert-ticker">
-        <span class="ticker-label">⚠ ALERTS</span>
-        <div class="ticker-track"><div class="ticker-inner" id="ticker-text">Loading threat intelligence...</div></div>
-      </div>
-
-      <!-- Section Header -->
-      <div class="section-header">
-        <div class="section-title">THREAT <span>OVERVIEW</span></div>
-        <div class="section-header-line"></div>
-        <button class="soc-btn primary" onclick="refreshSimulation()"><i class="bi bi-arrow-clockwise"></i> REFRESH</button>
-      </div>
-
-      <!-- KPI Cards -->
-      <div class="kpi-grid mb-20" id="kpi-grid">
-        <div class="glass-card kpi-card" style="--kpi-color:var(--red)">
-          <div class="kpi-label">TOTAL CASES</div>
-          <div class="kpi-value" id="kpi-cases">0</div>
-          <div class="kpi-trend up"><i class="bi bi-arrow-up-right"></i> <span id="kpi-cases-sub">loading...</span></div>
-          <i class="bi bi-exclamation-triangle-fill kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--amber)">
-          <div class="kpi-label">OPEN INCIDENTS</div>
-          <div class="kpi-value" id="kpi-open">0</div>
-          <div class="kpi-trend up"><i class="bi bi-circle-fill" style="font-size:7px;"></i> Requires attention</div>
-          <i class="bi bi-shield-x kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--cyan)">
-          <div class="kpi-label">NETWORK LOGS</div>
-          <div class="kpi-value" id="kpi-logs">0</div>
-          <div class="kpi-trend"><i class="bi bi-wifi kpi-icon" style="position:static;font-size:13px;color:inherit;opacity:1;"></i> Traffic analyzed</div>
-          <i class="bi bi-activity kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--red)">
-          <div class="kpi-label">THREAT FLAGS</div>
-          <div class="kpi-value" id="kpi-threats">0</div>
-          <div class="kpi-trend up"><i class="bi bi-arrow-up-right"></i> Malicious detected</div>
-          <i class="bi bi-bug-fill kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--purple)">
-          <div class="kpi-label">SUSPECTS</div>
-          <div class="kpi-value" id="kpi-suspects">0</div>
-          <div class="kpi-trend"><i class="bi bi-person-fill" style="font-size:11px;"></i> Profiles tracked</div>
-          <i class="bi bi-person-lines-fill kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--red)">
-          <div class="kpi-label">HIGH RISK</div>
-          <div class="kpi-value" id="kpi-highrisk">0</div>
-          <div class="kpi-trend up">Immediate review needed</div>
-          <i class="bi bi-fire kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--green)">
-          <div class="kpi-label">RESOLVED</div>
-          <div class="kpi-value" id="kpi-resolved">0</div>
-          <div class="kpi-trend down"><i class="bi bi-check-circle-fill" style="font-size:11px;"></i> Closed cases</div>
-          <i class="bi bi-check2-all kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--amber)">
-          <div class="kpi-label">AMT LOST (₹)</div>
-          <div class="kpi-value" id="kpi-amount" style="font-size:22px;">0</div>
-          <div class="kpi-trend up"><i class="bi bi-currency-rupee" style="font-size:11px;"></i> Total fraud value</div>
-          <i class="bi bi-cash-stack kpi-icon"></i>
-        </div>
-      </div>
-
-      <!-- Charts Row 1 -->
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
-            <div class="card-title">ATTACK TIMELINE</div>
-            <button class="soc-btn" style="padding:3px 8px;font-size:11px;" onclick="exportChart('timelineChart')"><i class="bi bi-download"></i></button>
-          </div>
-          <div class="chart-wrap"><canvas id="timelineChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
-            <div class="card-title">CRIME TYPE DISTRIBUTION</div>
-            <button class="soc-btn" style="padding:3px 8px;font-size:11px;" onclick="exportChart('crimeTypeChart')"><i class="bi bi-download"></i></button>
-          </div>
-          <div class="chart-wrap"><canvas id="crimeTypeChart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Charts Row 2 -->
-      <div class="charts-3col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-            <div class="card-title">STATUS BREAKDOWN</div>
-          </div>
-          <div class="chart-wrap"><canvas id="statusChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--amber);box-shadow:0 0 6px var(--amber);"></div>
-            <div class="card-title">DEVICE DISTRIBUTION</div>
-          </div>
-          <div class="chart-wrap"><canvas id="deviceChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>
-            <div class="card-title">THREAT FLAGS</div>
-          </div>
-          <div class="chart-wrap"><canvas id="threatFlagChart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Charts Row 3 -->
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
-            <div class="card-title">TOP ATTACK LOCATIONS</div>
-          </div>
-          <div class="chart-wrap"><canvas id="locationChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
-            <div class="card-title">RISK LEVEL DISTRIBUTION</div>
-          </div>
-          <div class="chart-wrap"><canvas id="riskDonutChart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Recent Alerts Table -->
-      <div class="glass-card mb-20">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-          <div class="card-title">LIVE INCIDENT FEED</div>
-          <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);">Latest 10 events</span>
-        </div>
-        <div class="table-container">
-          <table class="soc-table" id="recent-table">
-            <thead>
-              <tr>
-                <th>CASE ID</th><th>TIMESTAMP</th><th>CRIME TYPE</th>
-                <th>LOCATION</th><th>IP ADDRESS</th><th>AMOUNT (₹)</th><th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody id="recent-tbody"></tbody>
-          </table>
-        </div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Gender Split</div>
+      <div style="position:relative;height:200px;">
+        <canvas id="chartGender" role="img" aria-label="Gender distribution pie chart"></canvas>
       </div>
     </div>
-
-    <!-- ===========================
-         PAGE: UPLOAD
-    =========================== -->
-    <div class="page" id="page-upload">
-      <div class="section-header">
-        <div class="section-title">DATA <span>UPLOAD</span></div>
-        <div class="section-header-line"></div>
-      </div>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="glass-card h-100" style="padding:20px;">
-            <div style="font-family:var(--font-hud);font-size:16px;font-weight:600;color:var(--cyan);margin-bottom:12px;">
-              <i class="bi bi-shield-exclamation"></i> Crime Logs
-            </div>
-            <div class="upload-zone" id="drop-crime" 
-                 ondragover="handleDrag(event,'drop-crime')" 
-                 ondragleave="handleDragLeave(event,'drop-crime')"
-                 ondrop="handleDrop(event,'crime')"
-                 onclick="document.getElementById('file-crime').click()">
-              <div class="upload-icon"><i class="bi bi-file-earmark-spreadsheet"></i></div>
-              <div class="upload-title">cyber_crime_logs.csv</div>
-              <div class="upload-sub">Drag & Drop or Click to Upload</div>
-            </div>
-            <input type="file" id="file-crime" accept=".csv" style="display:none" onchange="handleFile(event,'crime')"/>
-            <div id="status-crime" style="margin-top:10px;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">
-              No file loaded — using sample data
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="glass-card h-100" style="padding:20px;">
-            <div style="font-family:var(--font-hud);font-size:16px;font-weight:600;color:var(--purple);margin-bottom:12px;">
-              <i class="bi bi-diagram-3-fill"></i> Network Activity
-            </div>
-            <div class="upload-zone" id="drop-network"
-                 ondragover="handleDrag(event,'drop-network')"
-                 ondragleave="handleDragLeave(event,'drop-network')"
-                 ondrop="handleDrop(event,'network')"
-                 onclick="document.getElementById('file-network').click()">
-              <div class="upload-icon" style="color:var(--purple);"><i class="bi bi-file-earmark-bar-graph"></i></div>
-              <div class="upload-title">network_activity.csv</div>
-              <div class="upload-sub">Drag & Drop or Click to Upload</div>
-            </div>
-            <input type="file" id="file-network" accept=".csv" style="display:none" onchange="handleFile(event,'network')"/>
-            <div id="status-network" style="margin-top:10px;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">
-              No file loaded — using sample data
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="glass-card h-100" style="padding:20px;">
-            <div style="font-family:var(--font-hud);font-size:16px;font-weight:600;color:var(--amber);margin-bottom:12px;">
-              <i class="bi bi-person-badge-fill"></i> Suspect Profiles
-            </div>
-            <div class="upload-zone" id="drop-suspect"
-                 ondragover="handleDrag(event,'drop-suspect')"
-                 ondragleave="handleDragLeave(event,'drop-suspect')"
-                 ondrop="handleDrop(event,'suspect')"
-                 onclick="document.getElementById('file-suspect').click()">
-              <div class="upload-icon" style="color:var(--amber);"><i class="bi bi-file-earmark-person"></i></div>
-              <div class="upload-title">suspect_profiles.csv</div>
-              <div class="upload-sub">Drag & Drop or Click to Upload</div>
-            </div>
-            <input type="file" id="file-suspect" accept=".csv" style="display:none" onchange="handleFile(event,'suspect')"/>
-            <div id="status-suspect" style="margin-top:10px;font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">
-              No file loaded — using sample data
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="glass-card mt-20" style="padding:20px;">
-        <div style="font-family:var(--font-hud);font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:12px;">
-          AUTO-DETECT COLUMNS
-        </div>
-        <div id="column-detect" style="font-family:var(--font-mono);font-size:12px;color:var(--text-secondary);">
-          Upload a CSV file to auto-detect columns and dataset type.
-        </div>
+    <div class="chart-card">
+      <div class="chart-title">Qualification</div>
+      <div style="position:relative;height:200px;">
+        <canvas id="chartQual" role="img" aria-label="Qualification distribution bar chart"></canvas>
       </div>
     </div>
-
-    <!-- ===========================
-         PAGE: CRIME LOGS
-    =========================== -->
-    <div class="page" id="page-crime-logs">
-      <div class="section-header">
-        <div class="section-title">CRIME <span>LOGS</span></div>
-        <div class="section-header-line"></div>
-        <button class="soc-btn" onclick="exportTableCSV('crimes-table','crime_logs_export')"><i class="bi bi-download"></i> Export CSV</button>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
-            <div class="card-title">CRIME TYPES OVER TIME</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="crimesTimeChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-            <div class="card-title">AMOUNT LOST BY CRIME TYPE</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="amountChart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Top IPs -->
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
-            <div class="card-title">TOP MALICIOUS IPs</div>
-          </div>
-          <div id="top-ips-list" class="card-body-pad"></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--amber);box-shadow:0 0 6px var(--amber);"></div>
-            <div class="card-title">AMOUNT LOST BY LOCATION</div>
-          </div>
-          <div class="chart-wrap"><canvas id="locationAmountChart"></canvas></div>
-        </div>
-      </div>
-
-      <!-- Crimes Table -->
-      <div class="glass-card">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--red);"></div>
-          <div class="card-title">ALL CRIME INCIDENTS</div>
-          <div class="ctrl-row" style="margin-left:auto;">
-            <input class="soc-input" type="text" id="crime-search" placeholder="Search..." oninput="filterCrimesTable()"/>
-            <select class="soc-input" id="crime-status-filter" onchange="filterCrimesTable()">
-              <option value="">All Status</option>
-              <option value="Open">Open</option>
-              <option value="Under Investigation">Under Investigation</option>
-              <option value="Closed">Closed</option>
-            </select>
-            <select class="soc-input" id="crime-type-filter" onchange="filterCrimesTable()">
-              <option value="">All Types</option>
-            </select>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="soc-table" id="crimes-table">
-            <thead>
-              <tr>
-                <th onclick="sortTable('crimes-table',0)" style="cursor:pointer;">CASE ID ↕</th>
-                <th onclick="sortTable('crimes-table',1)" style="cursor:pointer;">TIMESTAMP ↕</th>
-                <th onclick="sortTable('crimes-table',2)" style="cursor:pointer;">TYPE ↕</th>
-                <th onclick="sortTable('crimes-table',3)" style="cursor:pointer;">LOCATION ↕</th>
-                <th>IP ADDRESS</th>
-                <th onclick="sortTable('crimes-table',6)" style="cursor:pointer;">AMOUNT ↕</th>
-                <th onclick="sortTable('crimes-table',7)" style="cursor:pointer;">STATUS ↕</th>
-              </tr>
-            </thead>
-            <tbody id="crimes-tbody"></tbody>
-          </table>
-        </div>
-        <div style="padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-dim);">
-          <span id="crimes-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">0 records</span>
-          <div class="pagination" id="crimes-pagination"></div>
-        </div>
+    <div class="chart-card">
+      <div class="chart-title">Designation</div>
+      <div style="position:relative;height:200px;">
+        <canvas id="chartDesig" role="img" aria-label="Designation distribution bar chart"></canvas>
       </div>
     </div>
+  </div>
 
-    <!-- ===========================
-         PAGE: NETWORK ACTIVITY
-    =========================== -->
-    <div class="page" id="page-network">
-      <div class="section-header">
-        <div class="section-title">NETWORK <span>ACTIVITY</span></div>
-        <div class="section-header-line"></div>
-        <button class="soc-btn" onclick="exportTableCSV('network-table','network_activity_export')"><i class="bi bi-download"></i> Export CSV</button>
-      </div>
-
-      <div class="kpi-grid mb-20">
-        <div class="glass-card kpi-card" style="--kpi-color:var(--cyan)">
-          <div class="kpi-label">TOTAL LOGS</div>
-          <div class="kpi-value" id="net-kpi-total">0</div>
-          <i class="bi bi-collection-fill kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--red)">
-          <div class="kpi-label">THREATS FLAGGED</div>
-          <div class="kpi-value" id="net-kpi-threats">0</div>
-          <i class="bi bi-bug-fill kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--green)">
-          <div class="kpi-label">CLEAN TRAFFIC</div>
-          <div class="kpi-value" id="net-kpi-clean">0</div>
-          <i class="bi bi-shield-check kpi-icon"></i>
-        </div>
-        <div class="glass-card kpi-card" style="--kpi-color:var(--amber)">
-          <div class="kpi-label">TOTAL BYTES</div>
-          <div class="kpi-value" id="net-kpi-bytes" style="font-size:22px;">0</div>
-          <i class="bi bi-hdd-network kpi-icon"></i>
-        </div>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
-            <div class="card-title">NETWORK TRAFFIC OVER TIME</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="networkTimeChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
-            <div class="card-title">RESPONSE CODE ANALYTICS</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="responseCodeChart"></canvas></div>
-        </div>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-            <div class="card-title">SUSPICIOUS DOMAIN FREQUENCY</div>
-          </div>
-          <div class="chart-wrap"><canvas id="domainChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--amber);box-shadow:0 0 6px var(--amber);"></div>
-            <div class="card-title">BYTES TRANSFERRED HISTOGRAM</div>
-          </div>
-          <div class="chart-wrap"><canvas id="bytesHistChart"></canvas></div>
-        </div>
-      </div>
-
-      <div class="glass-card mb-20">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--green);"></div>
-          <div class="card-title">TOP SOURCE IPs BY ACTIVITY</div>
-        </div>
-        <div id="net-top-ips" class="card-body-pad"></div>
-      </div>
-
-      <!-- Network Table -->
-      <div class="glass-card">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--cyan);"></div>
-          <div class="card-title">NETWORK ACTIVITY LOGS</div>
-          <div class="ctrl-row" style="margin-left:auto;">
-            <input class="soc-input" type="text" id="net-search" placeholder="Search..." oninput="filterNetworkTable()"/>
-            <select class="soc-input" id="net-flag-filter" onchange="filterNetworkTable()">
-              <option value="">All Traffic</option>
-              <option value="1">Threats Only</option>
-              <option value="0">Clean Only</option>
-            </select>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="soc-table" id="network-table">
-            <thead>
-              <tr>
-                <th>LOG ID</th><th>TIMESTAMP</th><th>IP ADDRESS</th>
-                <th>URL ACCESSED</th><th>RESP. CODE</th><th>BYTES</th><th>THREAT</th>
-              </tr>
-            </thead>
-            <tbody id="network-tbody"></tbody>
-          </table>
-        </div>
-        <div style="padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-dim);">
-          <span id="net-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">0 records</span>
-          <div class="pagination" id="net-pagination"></div>
-        </div>
-      </div>
+  <div class="table-card">
+    <div class="table-header">
+      <span class="table-header-title">All Registrations</span>
+      <input class="search-box" id="search-input" type="text" placeholder="Search name, email, designation…" oninput="filterTable()">
     </div>
-
-    <!-- ===========================
-         PAGE: SUSPECTS
-    =========================== -->
-    <div class="page" id="page-suspects">
-      <div class="section-header">
-        <div class="section-title">SUSPECT <span>PROFILES</span></div>
-        <div class="section-header-line"></div>
-        <button class="soc-btn" onclick="exportTableCSV('suspects-table','suspect_profiles_export')"><i class="bi bi-download"></i> Export CSV</button>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-            <div class="card-title">RISK LEVEL DISTRIBUTION</div>
-          </div>
-          <div class="chart-wrap"><canvas id="suspectRiskChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
-            <div class="card-title">AGE DISTRIBUTION</div>
-          </div>
-          <div class="chart-wrap"><canvas id="ageChart"></canvas></div>
-        </div>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
-            <div class="card-title">PREVIOUS CASES DISTRIBUTION</div>
-          </div>
-          <div class="chart-wrap"><canvas id="prevCasesChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--amber);box-shadow:0 0 6px var(--amber);"></div>
-            <div class="card-title">TOP REPEAT OFFENDERS</div>
-          </div>
-          <div id="top-offenders" class="card-body-pad"></div>
-        </div>
-      </div>
-
-      <!-- Suspect Cards -->
-      <div class="glass-card mb-20">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--red);"></div>
-          <div class="card-title">HIGH-RISK SUSPECT INTELLIGENCE CARDS</div>
-        </div>
-        <div id="suspect-cards" class="card-body-pad" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
-      </div>
-
-      <!-- Suspects Table -->
-      <div class="glass-card">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--amber);"></div>
-          <div class="card-title">ALL SUSPECT PROFILES</div>
-          <div class="ctrl-row" style="margin-left:auto;">
-            <input class="soc-input" type="text" id="sus-search" placeholder="Search..." oninput="filterSuspectsTable()"/>
-            <select class="soc-input" id="sus-risk-filter" onchange="filterSuspectsTable()">
-              <option value="">All Risk</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-        </div>
-        <div class="table-container">
-          <table class="soc-table" id="suspects-table">
-            <thead>
-              <tr>
-                <th>SUSPECT ID</th><th>NAME</th><th>IP ADDRESS</th>
-                <th onclick="sortTable('suspects-table',3)" style="cursor:pointer;">AGE ↕</th>
-                <th onclick="sortTable('suspects-table',4)" style="cursor:pointer;">PREV. CASES ↕</th>
-                <th onclick="sortTable('suspects-table',5)" style="cursor:pointer;">RISK LEVEL ↕</th>
-              </tr>
-            </thead>
-            <tbody id="suspects-tbody"></tbody>
-          </table>
-        </div>
-        <div style="padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border-dim);">
-          <span id="sus-count" style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted);">0 records</span>
-          <div class="pagination" id="sus-pagination"></div>
-        </div>
-      </div>
+    <div id="table-container">
+      <div class="loading"><div class="spinner"></div>Loading data…</div>
     </div>
-
-    <!-- ===========================
-         PAGE: ANALYTICS
-    =========================== -->
-    <div class="page" id="page-analytics">
-      <div class="section-header">
-        <div class="section-title">ADVANCED <span>ANALYTICS</span></div>
-        <div class="section-header-line"></div>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan);"></div>
-            <div class="card-title">CRIME vs NETWORK THREAT CORRELATION</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="correlationChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
-            <div class="card-title">THREAT RADAR — MULTI-DIMENSIONAL</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="radarChart"></canvas></div>
-        </div>
-      </div>
-
-      <div class="charts-2col mb-20">
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--red);box-shadow:0 0 6px var(--red);"></div>
-            <div class="card-title">STACKED CRIME STATUS BY TYPE</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="stackedChart"></canvas></div>
-        </div>
-        <div class="glass-card">
-          <div class="card-header-line">
-            <div class="card-dot" style="background:var(--amber);box-shadow:0 0 6px var(--amber);"></div>
-            <div class="card-title">POLAR — SUSPECT AGE vs RISK</div>
-          </div>
-          <div class="chart-wrap chart-wrap-tall"><canvas id="polarChart"></canvas></div>
-        </div>
-      </div>
-
-      <div class="glass-card mb-20">
-        <div class="card-header-line">
-          <div class="card-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>
-          <div class="card-title">NETWORK ACTIVITY — NETWORK RELATIONSHIP GRAPH</div>
-        </div>
-        <div style="padding:16px;">
-          <canvas id="networkCanvas" height="400"></canvas>
-        </div>
-      </div>
-    </div>
-
-  </main>
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<footer>
+  Data source: Google Sheets (Live) &nbsp;·&nbsp; Auto-refresh every 60s &nbsp;·&nbsp; NIELIT Ropar &nbsp;·&nbsp; FutureSkills PRIME
+</footer>
+
 <script>
-// ============================================================
-// CYBERWATCH SOC — DASHBOARD ENGINE
-// ============================================================
+const SHEET_ID = "1X_Chv3xMYSZPQokTfH9ft5bI4Pba1fN1H-Uxj8xSXqc";
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
-// ---- GLOBALS ----
-let DATA = { crimes: [], network: [], suspects: [] };
-let CHARTS = {};
-let crimesPage = 1, netPage = 1, susPage = 1;
-const PAGE_SIZE = 15;
-let sortStates = {};
-let filteredCrimes = [], filteredNetwork = [], filteredSuspects = [];
+let allRows = [];
+let charts = {};
 
-// ---- MOCK DATA GENERATOR ----
-const CRIME_TYPES = ['Identity Theft','Phishing','UPI Fraud','Ransomware','Data Breach'];
-const LOCATIONS   = ['Mumbai','Bangalore','Delhi','Chandigarh','Hyderabad','Chennai','Pune'];
-const STATUSES    = ['Open','Under Investigation','Closed'];
-const DEVICES     = ['Mobile','Laptop','Desktop'];
-const DOMAINS     = ['http://upi-fraud.net','http://fakebank.com','http://secure-site.com','http://normal.com','http://phish-bank.in'];
-const RISK_LEVELS = ['High','Medium','Low'];
-
-function randomIP() { return `192.168.${ri(1,254)}.${ri(1,254)}`; }
-function ri(a,b) { return Math.floor(Math.random()*(b-a+1))+a; }
-function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random()*(end.getTime()-start.getTime()));
-}
-function fmtDate(d) {
-  return d.toISOString().replace('T',' ').substring(0,19);
-}
-
-function generateMockCrimes(n=500) {
-  const s = new Date('2026-03-01'), e = new Date('2026-05-06');
-  return Array.from({length:n},(_,i)=>({
-    case_id:`CC${String(i+1).padStart(4,'0')}`,
-    timestamp: fmtDate(randomDate(s,e)),
-    crime_type: CRIME_TYPES[ri(0,CRIME_TYPES.length-1)],
-    location: LOCATIONS[ri(0,LOCATIONS.length-1)],
-    ip_address: randomIP(),
-    user_id: `U${ri(1000,9999)}`,
-    device_type: DEVICES[ri(0,DEVICES.length-1)],
-    amount_lost: ri(1000,50000),
-    status: STATUSES[ri(0,STATUSES.length-1)]
-  }));
-}
-
-function generateMockNetwork(n=500) {
-  const s = new Date('2026-03-01'), e = new Date('2026-05-06');
-  const codes = [200,200,200,403,403,404,500];
-  return Array.from({length:n},(_,i)=>({
-    log_id:`L${String(i+1).padStart(4,'0')}`,
-    timestamp: fmtDate(randomDate(s,e)),
-    ip_address: randomIP(),
-    url_accessed: DOMAINS[ri(0,DOMAINS.length-1)],
-    response_code: codes[ri(0,codes.length-1)],
-    bytes_transferred: ri(200,5000),
-    threat_flag: ri(0,1)
-  }));
-}
-
-function generateMockSuspects(n=200) {
-  return Array.from({length:n},(_,i)=>({
-    suspect_id:`S${String(i+1).padStart(3,'0')}`,
-    ip_address: randomIP(),
-    name:`Suspect_${i+1}`,
-    age: ri(18,65),
-    previous_cases: ri(0,8),
-    risk_level: RISK_LEVELS[ri(0,RISK_LEVELS.length-1)]
-  }));
-}
-
-// ---- CSV PARSING ----
-function autoDetectType(fields) {
-  const f = fields.join(',').toLowerCase();
-  if (f.includes('case_id') || f.includes('crime_type')) return 'crime';
-  if (f.includes('log_id') || f.includes('url_accessed') || f.includes('threat_flag')) return 'network';
-  if (f.includes('suspect_id') || f.includes('risk_level')) return 'suspect';
-  return null;
-}
-
-function handleFile(event, hint) {
-  const file = event.target.files[0];
-  if (!file) return;
-  parseCSVFile(file, hint);
-}
-
-function handleDrag(event, zoneId) {
-  event.preventDefault();
-  document.getElementById(zoneId).classList.add('dragover');
-}
-function handleDragLeave(event, zoneId) {
-  document.getElementById(zoneId).classList.remove('dragover');
-}
-function handleDrop(event, hint) {
-  event.preventDefault();
-  const zoneMap = {crime:'drop-crime', network:'drop-network', suspect:'drop-suspect'};
-  document.getElementById(zoneMap[hint])?.classList.remove('dragover');
-  const file = event.dataTransfer.files[0];
-  if (file) parseCSVFile(file, hint);
-}
-
-function parseCSVFile(file, hint) {
-  PapaParse.parse(file, {
-    header: true, skipEmptyLines: true,
-    complete: function(results) {
-      const type = hint || autoDetectType(results.meta.fields||[]);
-      if (!type) { showToast('warning','Unknown file','Could not detect dataset type.'); return; }
-      
-      const typeMap = {
-        crime: {key:'crimes', label:'Crime Logs', status:'status-crime'},
-        network: {key:'network', label:'Network Activity', status:'status-network'},
-        suspect: {key:'suspects', label:'Suspect Profiles', status:'status-suspect'}
-      };
-      const meta = typeMap[type];
-      DATA[meta.key] = results.data;
-      
-      const el = document.getElementById(meta.status);
-      if (el) el.innerHTML = `<span style="color:var(--green)">✓ Loaded ${results.data.length} records from ${file.name}</span>`;
-      
-      // Show column detect
-      const cdEl = document.getElementById('column-detect');
-      if (cdEl) {
-        cdEl.innerHTML = `<span style="color:var(--cyan)">${meta.label}</span> detected — Columns: <span style="color:var(--text-primary)">${results.meta.fields?.join(', ')}</span>`;
-      }
-      
-      initAll();
-      showToast('success', `${meta.label} Loaded`, `${results.data.length} records parsed successfully.`);
-    },
-    error: function(e) { showToast('danger','Parse Error', e.message); }
-  });
-}
-
-// ---- INIT ----
-function initAll() {
-  updateKPIs();
-  updateBadges();
-  buildTicker();
-  renderDashboardCharts();
-  renderRecentTable();
-  renderCrimeLogs();
-  renderNetworkPage();
-  renderSuspectsPage();
-  renderAnalytics();
-}
-
-// ---- CLOCK ----
-function startClock() {
-  function tick() {
-    document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-IN',{hour12:false});
-    setTimeout(tick, 1000);
-  }
-  tick();
-}
-
-// ---- SIDEBAR ----
-function toggleSidebar() {
-  const isMobile = window.innerWidth < 993;
-  if (isMobile) {
-    const s = document.getElementById('sidebar');
-    const o = document.getElementById('sidebar-overlay');
-    s.classList.toggle('mobile-open');
-    o.classList.toggle('active');
-  } else {
-    const s = document.getElementById('sidebar');
-    s.classList.toggle('collapsed');
-    document.body.classList.toggle('sidebar-collapsed');
-  }
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('mobile-open');
-  document.getElementById('sidebar-overlay').classList.remove('active');
-}
-
-// ---- PAGE NAVIGATION ----
-function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+id)?.classList.add('active');
-  if (el) el.classList.add('active');
-  const titles = {
-    dashboard:'THREAT INTELLIGENCE DASHBOARD',
-    upload:'DATA UPLOAD CENTER',
-    'crime-logs':'CRIME LOGS ANALYSIS',
-    network:'NETWORK ACTIVITY MONITOR',
-    suspects:'SUSPECT PROFILES DATABASE',
-    analytics:'ADVANCED ANALYTICS'
-  };
-  document.getElementById('topbar-title').textContent = titles[id]||id.toUpperCase();
-  if (window.innerWidth<993) closeSidebar();
-}
-
-// ---- KPIs ----
-function countUp(el, target, duration=1200) {
-  if (!el) return;
-  const start = 0, startTime = performance.now();
-  function update(now) {
-    const p = Math.min((now-startTime)/duration, 1);
-    const ease = 1 - Math.pow(1-p, 3);
-    el.textContent = Math.floor(start + (target-start)*ease).toLocaleString('en-IN');
-    if (p<1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-
-function updateKPIs() {
-  const c = DATA.crimes, n = DATA.network, s = DATA.suspects;
-  const open = c.filter(x=>x.status==='Open').length;
-  const closed = c.filter(x=>x.status==='Closed').length;
-  const threats = n.filter(x=>x.threat_flag==1||x.threat_flag==='1').length;
-  const highRisk = s.filter(x=>x.risk_level==='High').length;
-  const totalAmt = c.reduce((a,x)=>a+(parseFloat(x.amount_lost)||0),0);
-
-  countUp(document.getElementById('kpi-cases'), c.length);
-  countUp(document.getElementById('kpi-open'), open);
-  countUp(document.getElementById('kpi-logs'), n.length);
-  countUp(document.getElementById('kpi-threats'), threats);
-  countUp(document.getElementById('kpi-suspects'), s.length);
-  countUp(document.getElementById('kpi-highrisk'), highRisk);
-  countUp(document.getElementById('kpi-resolved'), closed);
-  const amtEl = document.getElementById('kpi-amount');
-  if (amtEl) {
-    setTimeout(()=>{ amtEl.textContent = '₹'+formatLakh(totalAmt); }, 1200);
-  }
-  const subEl = document.getElementById('kpi-cases-sub');
-  if (subEl) subEl.textContent = `${open} active / ${closed} resolved`;
-
-  // Network page KPIs
-  const nbytes = n.reduce((a,x)=>a+(parseFloat(x.bytes_transferred)||0),0);
-  countUp(document.getElementById('net-kpi-total'), n.length);
-  countUp(document.getElementById('net-kpi-threats'), threats);
-  countUp(document.getElementById('net-kpi-clean'), n.length-threats);
-  const bytesEl = document.getElementById('net-kpi-bytes');
-  if (bytesEl) setTimeout(()=>{ bytesEl.textContent = formatBytes(nbytes); }, 1200);
-}
-
-function formatLakh(n) {
-  if (n>=10000000) return (n/10000000).toFixed(1)+'Cr';
-  if (n>=100000) return (n/100000).toFixed(1)+'L';
-  if (n>=1000) return (n/1000).toFixed(0)+'K';
-  return n.toFixed(0);
-}
-function formatBytes(b) {
-  if (b>=1073741824) return (b/1073741824).toFixed(1)+'GB';
-  if (b>=1048576) return (b/1048576).toFixed(1)+'MB';
-  if (b>=1024) return (b/1024).toFixed(1)+'KB';
-  return b+'B';
-}
-
-function updateBadges() {
-  const open = DATA.crimes.filter(x=>x.status==='Open').length;
-  const high = DATA.suspects.filter(x=>x.risk_level==='High').length;
-  document.getElementById('nb-alerts').textContent = open;
-  document.getElementById('nb-crimes').textContent = DATA.crimes.length;
-  document.getElementById('nb-suspects').textContent = high;
-}
-
-// ---- TICKER ----
-function buildTicker() {
-  const items = DATA.crimes.slice(0,20).map(c=>
-    `⚠ CASE ${c.case_id} — ${c.crime_type} from ${c.location} — ₹${parseFloat(c.amount_lost||0).toLocaleString()} — STATUS: ${c.status}`
-  );
-  document.getElementById('ticker-text').textContent = items.join('   ///   ');
-}
-
-// ---- CHART HELPERS ----
-const PALETTE = {
-  cyan:'#00f5ff', purple:'#b84aff', red:'#ff2e4d',
-  amber:'#ffb300', green:'#00ff88', blue:'#3a7bd5', pink:'#ff69b4'
-};
-const CHART_COLORS = [
-  '#00f5ff','#b84aff','#ff2e4d','#ffb300','#00ff88',
-  '#3a7bd5','#ff69b4','#ff6b35','#a8ff78','#56ccf2'
-];
-
-function chartDefaults() {
-  return {
-    responsive:true, maintainAspectRatio:true,
-    animation:{duration:800,easing:'easeInOutQuart'},
-    plugins:{
-      legend:{ labels:{ color:'#6a8aaa', font:{family:'Rajdhani',size:12}, padding:12 } },
-      tooltip:{
-        backgroundColor:'rgba(4,12,20,0.95)',
-        borderColor:'rgba(0,245,255,0.2)', borderWidth:1,
-        titleColor:'#00f5ff', bodyColor:'#e4eef8',
-        padding:10, titleFont:{family:'Rajdhani',size:13,weight:'bold'}
-      }
-    },
-    scales:{
-      x:{ ticks:{color:'#6a8aaa',font:{family:"'Share Tech Mono'",size:11}},
-           grid:{color:'rgba(14,32,53,0.8)'} },
-      y:{ ticks:{color:'#6a8aaa',font:{family:"'Share Tech Mono'",size:11}},
-           grid:{color:'rgba(14,32,53,0.8)'} }
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g,'').trim());
+  return lines.slice(1).map(line => {
+    const vals = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { vals.push(cur.trim()); cur = ''; }
+      else { cur += c; }
     }
-  };
+    vals.push(cur.trim());
+    const row = {};
+    headers.forEach((h, i) => row[h] = (vals[i] || '').replace(/^"|"$/g,'').trim());
+    return row;
+  }).filter(r => r['Full Name'] && r['Full Name'].length > 1);
 }
 
-function makeChart(id, type, data, options={}) {
-  if (CHARTS[id]) { CHARTS[id].destroy(); }
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const baseOpts = chartDefaults();
-  if (type==='doughnut'||type==='pie'||type==='polarArea'||type==='radar') {
-    delete baseOpts.scales;
-  }
-  if (type==='radar') {
-    baseOpts.scales = {r:{ticks:{color:'#6a8aaa',backdropColor:'transparent'},
-      grid:{color:'rgba(0,245,255,0.1)'}, pointLabels:{color:'#6a8aaa'}}};
-  }
-  CHARTS[id] = new Chart(ctx, { type, data, options: mergeDeep(baseOpts, options) });
-  return CHARTS[id];
-}
-
-function mergeDeep(target, source) {
-  for (const key of Object.keys(source)) {
-    if (source[key]&&typeof source[key]==='object'&&!Array.isArray(source[key])) {
-      if (!target[key]) target[key]={};
-      mergeDeep(target[key], source[key]);
-    } else { target[key] = source[key]; }
-  }
-  return target;
-}
-
-function countBy(arr, key) {
-  const counts = {};
-  arr.forEach(x=>{ const v=x[key]; counts[v]=(counts[v]||0)+1; });
-  return counts;
-}
-
-function sortObjByValue(obj, desc=true) {
-  return Object.entries(obj).sort((a,b)=>desc?b[1]-a[1]:a[1]-b[1]);
-}
-
-// ---- DASHBOARD CHARTS ----
-function renderDashboardCharts() {
-  const c = DATA.crimes, n = DATA.network, s = DATA.suspects;
-
-  // 1. Timeline — crimes by day
-  {
-    const byDay = {};
-    c.forEach(x=>{ const d=x.timestamp.substring(0,10); byDay[d]=(byDay[d]||0)+1; });
-    const sorted = Object.keys(byDay).sort();
-    const labels = sorted.map(d=>d.substring(5)); // MM-DD
-    const vals = sorted.map(d=>byDay[d]);
-    
-    const grad = document.getElementById('timelineChart')?.getContext('2d')?.createLinearGradient(0,0,0,280);
-    if (grad) { grad.addColorStop(0,'rgba(0,245,255,0.3)'); grad.addColorStop(1,'rgba(0,245,255,0)'); }
-    
-    makeChart('timelineChart','line',{
-      labels, datasets:[{
-        label:'Incidents',data:vals,
-        borderColor:PALETTE.cyan, backgroundColor:grad||'rgba(0,245,255,0.1)',
-        borderWidth:2, fill:true, tension:0.4, pointRadius:3,
-        pointBackgroundColor:PALETTE.cyan,
-        pointHoverRadius:6, pointHoverBackgroundColor:'#fff'
+function makeChart(id, type, labels, data, colors) {
+  if (charts[id]) charts[id].destroy();
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, {
+    type,
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: colors,
+        borderColor: type === 'doughnut' ? '#ffffff' : colors.map(c => c + 'cc'),
+        borderWidth: type === 'doughnut' ? 2 : 1,
+        borderRadius: type === 'bar' ? 4 : 0
       }]
-    });
-  }
-
-  // 2. Crime type donut
-  {
-    const counts = countBy(c,'crime_type');
-    const sorted = sortObjByValue(counts);
-    makeChart('crimeTypeChart','doughnut',{
-      labels:sorted.map(x=>x[0]),
-      datasets:[{ data:sorted.map(x=>x[1]),
-        backgroundColor:CHART_COLORS.slice(0,sorted.length),
-        borderColor:'rgba(0,0,0,0.3)', borderWidth:2,
-        hoverOffset:8 }]
-    });
-  }
-
-  // 3. Status pie
-  {
-    const counts = countBy(c,'status');
-    makeChart('statusChart','pie',{
-      labels:Object.keys(counts),
-      datasets:[{ data:Object.values(counts),
-        backgroundColor:[PALETTE.red,PALETTE.amber,PALETTE.green],
-        borderColor:'rgba(0,0,0,0.4)', borderWidth:2 }]
-    });
-  }
-
-  // 4. Device bar
-  {
-    const counts = countBy(c,'device_type');
-    makeChart('deviceChart','bar',{
-      labels:Object.keys(counts),
-      datasets:[{ label:'Devices', data:Object.values(counts),
-        backgroundColor:[PALETTE.cyan,PALETTE.purple,PALETTE.amber],
-        borderRadius:4, borderWidth:0 }]
-    },{plugins:{legend:{display:false}}});
-  }
-
-  // 5. Threat flag donut
-  {
-    const flagged = n.filter(x=>x.threat_flag==1||x.threat_flag==='1').length;
-    makeChart('threatFlagChart','doughnut',{
-      labels:['Threat','Clean'],
-      datasets:[{ data:[flagged, n.length-flagged],
-        backgroundColor:[PALETTE.red, PALETTE.green],
-        borderColor:'rgba(0,0,0,0.4)', borderWidth:2, hoverOffset:6 }]
-    });
-  }
-
-  // 6. Location bar
-  {
-    const counts = countBy(c,'location');
-    const sorted = sortObjByValue(counts).slice(0,8);
-    makeChart('locationChart','bar',{
-      labels:sorted.map(x=>x[0]),
-      datasets:[{ label:'Incidents', data:sorted.map(x=>x[1]),
-        backgroundColor:CHART_COLORS.slice(0,sorted.length),
-        borderRadius:4, borderWidth:0 }]
-    },{
-      indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{ x:{ticks:{color:'#6a8aaa'},grid:{color:'rgba(14,32,53,0.8)'}},
-               y:{ticks:{color:'#6a8aaa'},grid:{color:'rgba(14,32,53,0.8)'}} }
-    });
-  }
-
-  // 7. Risk donut (suspects)
-  {
-    const counts = countBy(s,'risk_level');
-    makeChart('riskDonutChart','doughnut',{
-      labels:['High','Medium','Low'],
-      datasets:[{ data:[counts.High||0, counts.Medium||0, counts.Low||0],
-        backgroundColor:[PALETTE.red, PALETTE.amber, PALETTE.green],
-        borderColor:'rgba(0,0,0,0.4)', borderWidth:2, hoverOffset:8 }]
-    });
-  }
-}
-
-// ---- RECENT TABLE ----
-function renderRecentTable() {
-  const tbody = document.getElementById('recent-tbody');
-  if (!tbody) return;
-  const rows = [...DATA.crimes].sort((a,b)=>b.timestamp.localeCompare(a.timestamp)).slice(0,10);
-  tbody.innerHTML = rows.map(r=>`
-    <tr>
-      <td><span class="ip-chip">${r.case_id}</span></td>
-      <td style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);">${r.timestamp}</td>
-      <td>${r.crime_type}</td>
-      <td>${r.location}</td>
-      <td><span class="ip-chip">${r.ip_address}</span></td>
-      <td style="color:var(--amber);">₹${parseFloat(r.amount_lost||0).toLocaleString()}</td>
-      <td>${statusBadge(r.status)}</td>
-    </tr>`).join('');
-}
-
-function statusBadge(s) {
-  if (!s) return '';
-  const map = {
-    'Open':'badge-open','Closed':'badge-closed',
-    'Under Investigation':'badge-invest',
-    'High':'badge-high','Medium':'badge-medium','Low':'badge-low',
-    '1':'badge-threat','0':'badge-safe'
-  };
-  const cls = map[s]||'badge-invest';
-  return `<span class="badge-status ${cls}">${s}</span>`;
-}
-
-// ---- CRIME LOGS PAGE ----
-function renderCrimeLogs() {
-  const c = DATA.crimes;
-  filteredCrimes = [...c];
-
-  // Build filter options
-  const typeFilter = document.getElementById('crime-type-filter');
-  if (typeFilter && typeFilter.options.length<=1) {
-    const types = [...new Set(c.map(x=>x.crime_type))].sort();
-    types.forEach(t=>{ const o=document.createElement('option'); o.value=t; o.textContent=t; typeFilter.appendChild(o); });
-  }
-
-  // Charts
-  // Crime types over time (stacked line)
-  {
-    const types = [...new Set(c.map(x=>x.crime_type))];
-    const days = [...new Set(c.map(x=>x.timestamp.substring(0,10)))].sort();
-    const labelsShort = days.map(d=>d.substring(5));
-    const datasets = types.map((t,i)=>({
-      label:t, data:days.map(d=>c.filter(x=>x.timestamp.startsWith(d)&&x.crime_type===t).length),
-      borderColor:CHART_COLORS[i], backgroundColor:CHART_COLORS[i]+'22',
-      borderWidth:1.5, fill:false, tension:0.3, pointRadius:0,
-    }));
-    makeChart('crimesTimeChart','line',{ labels:labelsShort, datasets });
-  }
-
-  // Amount by crime type
-  {
-    const byType = {};
-    c.forEach(x=>{ byType[x.crime_type]=(byType[x.crime_type]||0)+(parseFloat(x.amount_lost)||0); });
-    const sorted = sortObjByValue(byType);
-    makeChart('amountChart','bar',{
-      labels:sorted.map(x=>x[0]),
-      datasets:[{ label:'Amount Lost (₹)', data:sorted.map(x=>x[1]),
-        backgroundColor:CHART_COLORS.slice(0,sorted.length),
-        borderRadius:6, borderWidth:0 }]
-    },{
-      plugins:{legend:{display:false}},
-      scales:{ y:{ticks:{color:'#6a8aaa',callback:v=>'₹'+formatLakh(v)}}, x:{ticks:{color:'#6a8aaa'}} }
-    });
-  }
-
-  // Top IPs
-  {
-    const ipCount = countBy(c,'ip_address');
-    const top = sortObjByValue(ipCount).slice(0,10);
-    const max = top[0]?.[1]||1;
-    const container = document.getElementById('top-ips-list');
-    if (container) {
-      container.innerHTML = top.map((x,i)=>`
-        <div class="threat-card mb-20" style="--kpi-color:${CHART_COLORS[i%CHART_COLORS.length]};margin-bottom:10px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="threat-name"><span class="ip-chip">${x[0]}</span></span>
-            <span style="font-family:var(--font-mono);font-size:12px;color:var(--kpi-color);">${x[1]} hits</span>
-          </div>
-          <div class="threat-bar-bg"><div class="threat-bar" style="width:${(x[1]/max*100).toFixed(0)}%;"></div></div>
-        </div>`).join('');
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: type === 'doughnut', position: 'bottom',
+          labels: { font: { size: 11, family: 'IBM Plex Mono' }, boxWidth: 10, padding: 8 }
+        },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw} (${Math.round(ctx.raw / data.reduce((a,b)=>a+b,0)*100)}%)` } }
+      },
+      scales: type === 'bar' ? {
+        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10 } }, grid: { color: '#e8e5e0' } },
+        x: { ticks: { font: { size: 9 }, maxRotation: 30 }, grid: { display: false } }
+      } : {}
     }
-  }
-
-  // Amount by location
-  {
-    const byLoc = {};
-    c.forEach(x=>{ byLoc[x.location]=(byLoc[x.location]||0)+(parseFloat(x.amount_lost)||0); });
-    const sorted = sortObjByValue(byLoc);
-    makeChart('locationAmountChart','bar',{
-      labels:sorted.map(x=>x[0]),
-      datasets:[{ label:'Amount Lost',data:sorted.map(x=>x[1]),
-        backgroundColor:CHART_COLORS.slice(0,sorted.length),
-        borderRadius:6, borderWidth:0 }]
-    },{
-      plugins:{legend:{display:false}},
-      scales:{ y:{ticks:{color:'#6a8aaa',callback:v=>'₹'+formatLakh(v)}}, x:{ticks:{color:'#6a8aaa'}} }
-    });
-  }
-
-  renderCrimesTable();
-}
-
-function filterCrimesTable() {
-  const q = document.getElementById('crime-search')?.value.toLowerCase()||'';
-  const sf = document.getElementById('crime-status-filter')?.value||'';
-  const tf = document.getElementById('crime-type-filter')?.value||'';
-  filteredCrimes = DATA.crimes.filter(r=>{
-    const match = !q || Object.values(r).some(v=>String(v).toLowerCase().includes(q));
-    const sMatch = !sf || r.status===sf;
-    const tMatch = !tf || r.crime_type===tf;
-    return match && sMatch && tMatch;
   });
-  crimesPage = 1;
-  renderCrimesTable();
 }
 
-function renderCrimesTable() {
-  const tbody = document.getElementById('crimes-tbody');
-  const countEl = document.getElementById('crimes-count');
-  if (!tbody) return;
-  const total = filteredCrimes.length;
-  const start = (crimesPage-1)*PAGE_SIZE;
-  const page = filteredCrimes.slice(start, start+PAGE_SIZE);
-  tbody.innerHTML = page.map(r=>`
-    <tr>
-      <td><span class="ip-chip">${r.case_id||''}</span></td>
-      <td style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);">${r.timestamp||''}</td>
-      <td>${r.crime_type||''}</td>
-      <td>${r.location||''}</td>
-      <td><span class="ip-chip">${r.ip_address||''}</span></td>
-      <td style="color:var(--amber);">₹${parseFloat(r.amount_lost||0).toLocaleString()}</td>
-      <td>${statusBadge(r.status)}</td>
-    </tr>`).join('');
-  if (countEl) countEl.textContent = `${total} records`;
-  renderPagination('crimes-pagination', total, crimesPage, (p)=>{ crimesPage=p; renderCrimesTable(); });
-}
+function renderCharts(rows) {
+  const genderCount = {};
+  rows.forEach(r => { const g = r['Gender'] || 'Unknown'; genderCount[g] = (genderCount[g]||0)+1; });
+  makeChart('chartGender', 'doughnut',
+    Object.keys(genderCount), Object.values(genderCount),
+    ['#1e3a5f','#c8440a','#1a6b3c','#b8860b']
+  );
 
-// ---- NETWORK PAGE ----
-function renderNetworkPage() {
-  const n = DATA.network;
-  filteredNetwork = [...n];
-
-  // Network over time
-  {
-    const byDay = {};
-    n.forEach(x=>{ const d=x.timestamp.substring(0,10); byDay[d]=(byDay[d]||0)+1; });
-    const sorted = Object.keys(byDay).sort();
-    const flagByDay = {};
-    n.filter(x=>x.threat_flag==1||x.threat_flag==='1')
-     .forEach(x=>{ const d=x.timestamp.substring(0,10); flagByDay[d]=(flagByDay[d]||0)+1; });
-    
-    makeChart('networkTimeChart','line',{
-      labels:sorted.map(d=>d.substring(5)),
-      datasets:[
-        { label:'All Traffic', data:sorted.map(d=>byDay[d]),
-          borderColor:PALETTE.cyan, backgroundColor:'rgba(0,245,255,0.08)',
-          borderWidth:2, fill:true, tension:0.4, pointRadius:0 },
-        { label:'Threats', data:sorted.map(d=>flagByDay[d]||0),
-          borderColor:PALETTE.red, backgroundColor:'rgba(255,46,77,0.08)',
-          borderWidth:2, fill:true, tension:0.4, pointRadius:0 }
-      ]
-    });
-  }
-
-  // Response codes
-  {
-    const counts = countBy(n,'response_code');
-    const sorted = sortObjByValue(counts);
-    const colorMap = {'200':PALETTE.green,'403':PALETTE.amber,'404':PALETTE.red,'500':PALETTE.purple};
-    makeChart('responseCodeChart','bar',{
-      labels:sorted.map(x=>x[0]),
-      datasets:[{ label:'Requests', data:sorted.map(x=>x[1]),
-        backgroundColor:sorted.map(x=>colorMap[x[0]]||PALETTE.blue),
-        borderRadius:4, borderWidth:0 }]
-    },{plugins:{legend:{display:false}}});
-  }
-
-  // Domain frequency
-  {
-    const counts = countBy(n,'url_accessed');
-    const sorted = sortObjByValue(counts).slice(0,8);
-    makeChart('domainChart','bar',{
-      labels:sorted.map(x=>x[0].replace('http://','').substring(0,20)),
-      datasets:[{ label:'Hits', data:sorted.map(x=>x[1]),
-        backgroundColor:CHART_COLORS.slice(0,sorted.length), borderRadius:4, borderWidth:0 }]
-    },{
-      indexAxis:'y',
-      plugins:{legend:{display:false}},
-      scales:{ x:{ticks:{color:'#6a8aaa'}}, y:{ticks:{color:'#6a8aaa',font:{size:10}}} }
-    });
-  }
-
-  // Bytes histogram
-  {
-    const buckets = [0,1000,2000,3000,4000,5000];
-    const labels = buckets.slice(0,-1).map((b,i)=>`${b}-${buckets[i+1]}`);
-    const counts = new Array(labels.length).fill(0);
-    n.forEach(x=>{
-      const b = parseFloat(x.bytes_transferred)||0;
-      for (let i=0;i<buckets.length-1;i++) {
-        if (b>=buckets[i]&&b<buckets[i+1]) { counts[i]++; break; }
-      }
-    });
-    makeChart('bytesHistChart','bar',{
-      labels, datasets:[{ label:'Count', data:counts,
-        backgroundColor:CHART_COLORS.slice(0,labels.length), borderRadius:4, borderWidth:0 }]
-    },{plugins:{legend:{display:false}}});
-  }
-
-  // Top source IPs
-  {
-    const ipCount = countBy(n,'ip_address');
-    const top = sortObjByValue(ipCount).slice(0,8);
-    const max = top[0]?.[1]||1;
-    const el = document.getElementById('net-top-ips');
-    if (el) {
-      el.style.display='grid';
-      el.style.gridTemplateColumns='repeat(auto-fill,minmax(300px,1fr))';
-      el.style.gap='10px';
-      el.innerHTML = top.map((x,i)=>`
-        <div class="threat-card" style="--kpi-color:${CHART_COLORS[i%CHART_COLORS.length]};">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <span class="ip-chip">${x[0]}</span>
-            <span style="font-family:var(--font-mono);font-size:12px;color:var(--kpi-color);">${x[1]} reqs</span>
-          </div>
-          <div class="threat-bar-bg" style="margin-top:8px;"><div class="threat-bar" style="width:${(x[1]/max*100).toFixed(0)}%;"></div></div>
-        </div>`).join('');
-    }
-  }
-
-  renderNetworkTable();
-}
-
-function filterNetworkTable() {
-  const q = document.getElementById('net-search')?.value.toLowerCase()||'';
-  const ff = document.getElementById('net-flag-filter')?.value;
-  filteredNetwork = DATA.network.filter(r=>{
-    const match = !q || Object.values(r).some(v=>String(v).toLowerCase().includes(q));
-    const fMatch = ff===undefined||ff===''||String(r.threat_flag)===ff;
-    return match && fMatch;
+  const qualCount = {};
+  rows.forEach(r => {
+    let q = (r['Highest/Current Qualification (with Branch /domain as applicable)'] || 'Other').trim();
+    if (q.toLowerCase().includes('b.tech') || q.toLowerCase().includes('b tech')) q = 'B.Tech';
+    else if (q.toLowerCase().includes('m.tech') || q.toLowerCase().includes('m tech')) q = 'M.Tech';
+    else if (q.toLowerCase().includes('mca')) q = 'MCA';
+    else if (q.toLowerCase().includes('bca')) q = 'BCA';
+    else if (q.toLowerCase().includes('b.sc') || q.toLowerCase().includes('bsc')) q = 'B.Sc';
+    else if (q.toLowerCase().includes('m.sc') || q.toLowerCase().includes('msc')) q = 'M.Sc';
+    else q = q.substring(0,12) || 'Other';
+    qualCount[q] = (qualCount[q]||0)+1;
   });
-  netPage = 1;
-  renderNetworkTable();
+  const qSorted = Object.entries(qualCount).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  makeChart('chartQual', 'bar',
+    qSorted.map(e=>e[0]), qSorted.map(e=>e[1]),
+    ['#1e3a5f','#2a5298','#375faa','#4a6fbb','#1a6b3c','#c8440a']
+  );
+
+  const desigCount = {};
+  rows.forEach(r => {
+    let d = (r['Designation (if applicable)'] || 'N/A').trim();
+    if (d.length > 18) d = d.substring(0,16) + '…';
+    desigCount[d] = (desigCount[d]||0)+1;
+  });
+  const dSorted = Object.entries(desigCount).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  makeChart('chartDesig', 'bar',
+    dSorted.map(e=>e[0]), dSorted.map(e=>e[1]),
+    ['#c8440a','#d45a1f','#e06f3a','#e88455','#c8440a88','#1a6b3c','#b8860b']
+  );
 }
 
-function renderNetworkTable() {
-  const tbody = document.getElementById('network-tbody');
-  if (!tbody) return;
-  const total = filteredNetwork.length;
-  const start = (netPage-1)*PAGE_SIZE;
-  const page = filteredNetwork.slice(start, start+PAGE_SIZE);
-  tbody.innerHTML = page.map(r=>{
-    const isThreats = r.threat_flag==1||r.threat_flag==='1';
-    return `<tr>
-      <td><span class="ip-chip">${r.log_id||''}</span></td>
-      <td style="font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);">${r.timestamp||''}</td>
-      <td><span class="ip-chip">${r.ip_address||''}</span></td>
-      <td style="font-family:var(--font-mono);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;">${r.url_accessed||''}</td>
-      <td style="color:${r.response_code==200?'var(--green)':r.response_code==403?'var(--amber)':'var(--red)'};">${r.response_code||''}</td>
-      <td style="font-family:var(--font-mono);">${r.bytes_transferred||''}</td>
-      <td>${statusBadge(r.threat_flag==1||r.threat_flag==='1'?'1':'0')}</td>
+function renderTable(rows) {
+  if (!rows.length) {
+    document.getElementById('table-container').innerHTML = '<div class="loading">No records found.</div>';
+    return;
+  }
+  let html = `<div style="overflow-x:auto;"><table>
+    <thead><tr>
+      <th style="width:180px">Name</th>
+      <th style="width:140px">Father</th>
+      <th style="width:60px">Gender</th>
+      <th style="width:130px">Qualification</th>
+      <th style="width:170px">Designation</th>
+      <th style="width:180px">Email</th>
+      <th style="width:110px">Contact</th>
+      <th style="width:110px">Registered</th>
+    </tr></thead><tbody>`;
+
+  rows.forEach(r => {
+    const g = (r['Gender']||'').toLowerCase();
+    const gBadge = g === 'female' ? 'badge-f' : 'badge-m';
+    const gLabel = r['Gender'] || '—';
+    const ts = r['Timestamp'] ? r['Timestamp'].split(' ')[0] : '—';
+    let qual = (r['Highest/Current Qualification (with Branch /domain as applicable)']||'—').trim();
+    if (qual.length > 18) qual = qual.substring(0,16) + '…';
+    html += `<tr>
+      <td><strong>${r['Full Name']||'—'}</strong></td>
+      <td style="color:var(--muted)">${r['Father Name']||'—'}</td>
+      <td><span class="badge ${gBadge}">${gLabel}</span></td>
+      <td><span class="badge badge-qual">${qual}</span></td>
+      <td>${r['Designation (if applicable)']||'—'}</td>
+      <td style="color:var(--accent);font-family:var(--mono);font-size:12px">${r['Email']||'—'}</td>
+      <td style="font-family:var(--mono);font-size:12px">${r['Contact Number']||'—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${ts}</td>
     </tr>`;
-  }).join('');
-  document.getElementById('net-count').textContent = `${total} records`;
-  renderPagination('net-pagination', total, netPage, (p)=>{ netPage=p; renderNetworkTable(); });
-}
-
-// ---- SUSPECTS PAGE ----
-function renderSuspectsPage() {
-  const s = DATA.suspects;
-  filteredSuspects = [...s];
-
-  // Risk chart
-  {
-    const counts = countBy(s,'risk_level');
-    makeChart('suspectRiskChart','doughnut',{
-      labels:['High','Medium','Low'],
-      datasets:[{ data:[counts.High||0,counts.Medium||0,counts.Low||0],
-        backgroundColor:[PALETTE.red,PALETTE.amber,PALETTE.green],
-        borderColor:'rgba(0,0,0,0.4)', borderWidth:2, hoverOffset:8 }]
-    });
-  }
-
-  // Age distribution
-  {
-    const buckets = [[18,25],[26,35],[36,45],[46,55],[56,65]];
-    const labels = buckets.map(b=>`${b[0]}-${b[1]}`);
-    const counts = buckets.map(b=>s.filter(x=>x.age>=b[0]&&x.age<=b[1]).length);
-    makeChart('ageChart','bar',{
-      labels, datasets:[{ label:'Count', data:counts,
-        backgroundColor:CHART_COLORS.slice(0,5), borderRadius:6, borderWidth:0 }]
-    },{plugins:{legend:{display:false}}});
-  }
-
-  // Previous cases
-  {
-    const maxCases = Math.max(...s.map(x=>parseInt(x.previous_cases)||0));
-    const labels = Array.from({length:maxCases+1},(_,i)=>String(i));
-    const counts = labels.map(l=>s.filter(x=>String(x.previous_cases)===l).length);
-    makeChart('prevCasesChart','bar',{
-      labels, datasets:[{ label:'Suspects', data:counts,
-        backgroundColor:CHART_COLORS.slice(0,labels.length), borderRadius:4, borderWidth:0 }]
-    },{plugins:{legend:{display:false}},
-      scales:{x:{title:{display:true,text:'Previous Cases',color:'#6a8aaa'}}}});
-  }
-
-  // Top repeat offenders
-  {
-    const top = [...s].sort((a,b)=>(parseInt(b.previous_cases)||0)-(parseInt(a.previous_cases)||0)).slice(0,8);
-    const max = parseInt(top[0]?.previous_cases)||1;
-    const el = document.getElementById('top-offenders');
-    if (el) el.innerHTML = top.map((x,i)=>`
-      <div class="threat-card" style="--kpi-color:${i<3?'var(--red)':i<5?'var(--amber)':'var(--cyan)'};margin-bottom:8px;">
-        <div style="display:flex;justify-content:space-between;">
-          <div>
-            <div class="threat-name">${x.name||x.suspect_id}</div>
-            <div class="threat-meta"><span class="ip-chip">${x.ip_address||''}</span> · Age ${x.age||'?'}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--kpi-color);">${x.previous_cases}</div>
-            <div style="font-size:10px;color:var(--text-muted);">cases</div>
-          </div>
-        </div>
-        <div class="threat-bar-bg" style="margin-top:8px;">
-          <div class="threat-bar" style="width:${((parseInt(x.previous_cases)||0)/max*100).toFixed(0)}%;"></div>
-        </div>
-      </div>`).join('');
-  }
-
-  // High-risk cards
-  {
-    const highRisk = s.filter(x=>x.risk_level==='High').slice(0,12);
-    const el = document.getElementById('suspect-cards');
-    if (el) el.innerHTML = highRisk.map(x=>`
-      <div class="glass-card" style="padding:16px;border-left:3px solid var(--red);">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
-          <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--purple));display:flex;align-items:center;justify-content:center;font-family:var(--font-hud);font-weight:700;font-size:16px;flex-shrink:0;">
-            ${(x.name||'?').substring(0,1)}
-          </div>
-          <div>
-            <div style="font-family:var(--font-hud);font-weight:600;color:var(--text-primary);">${x.name||x.suspect_id}</div>
-            <div style="font-size:10px;font-family:var(--font-mono);color:var(--text-muted);">${x.suspect_id||''}</div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;">
-          <div><span style="color:var(--text-muted);">IP:</span> <span class="ip-chip" style="font-size:10px;">${x.ip_address||'?'}</span></div>
-          <div><span style="color:var(--text-muted);">Age:</span> <span style="color:var(--text-primary);">${x.age||'?'}</span></div>
-          <div><span style="color:var(--text-muted);">Cases:</span> <span style="color:var(--amber);">${x.previous_cases||0}</span></div>
-          <div>${statusBadge(x.risk_level)}</div>
-        </div>
-      </div>`).join('');
-  }
-
-  renderSuspectsTable();
-}
-
-function filterSuspectsTable() {
-  const q = document.getElementById('sus-search')?.value.toLowerCase()||'';
-  const rf = document.getElementById('sus-risk-filter')?.value||'';
-  filteredSuspects = DATA.suspects.filter(r=>{
-    const match = !q || Object.values(r).some(v=>String(v).toLowerCase().includes(q));
-    const rMatch = !rf || r.risk_level===rf;
-    return match && rMatch;
-  });
-  susPage = 1;
-  renderSuspectsTable();
-}
-
-function renderSuspectsTable() {
-  const tbody = document.getElementById('suspects-tbody');
-  if (!tbody) return;
-  const total = filteredSuspects.length;
-  const start = (susPage-1)*PAGE_SIZE;
-  const page = filteredSuspects.slice(start, start+PAGE_SIZE);
-  tbody.innerHTML = page.map(r=>`
-    <tr>
-      <td><span class="ip-chip">${r.suspect_id||''}</span></td>
-      <td style="font-family:var(--font-hud);font-weight:600;">${r.name||''}</td>
-      <td><span class="ip-chip">${r.ip_address||''}</span></td>
-      <td style="font-family:var(--font-mono);">${r.age||''}</td>
-      <td style="font-family:var(--font-mono);color:${parseInt(r.previous_cases)>2?'var(--red)':'var(--text-primary)'};">${r.previous_cases||0}</td>
-      <td>${statusBadge(r.risk_level)}</td>
-    </tr>`).join('');
-  document.getElementById('sus-count').textContent = `${total} records`;
-  renderPagination('sus-pagination', total, susPage, (p)=>{ susPage=p; renderSuspectsTable(); });
-}
-
-// ---- ANALYTICS PAGE ----
-function renderAnalytics() {
-  const c = DATA.crimes, n = DATA.network, s = DATA.suspects;
-
-  // Correlation: crimes per day vs threats per day
-  {
-    const allDays = [...new Set([
-      ...c.map(x=>x.timestamp.substring(0,10)),
-      ...n.map(x=>x.timestamp.substring(0,10))
-    ])].sort();
-    const crimesByDay = allDays.map(d=>c.filter(x=>x.timestamp.startsWith(d)).length);
-    const threatsByDay = allDays.map(d=>n.filter(x=>x.timestamp.startsWith(d)&&(x.threat_flag==1||x.threat_flag==='1')).length);
-    makeChart('correlationChart','line',{
-      labels:allDays.map(d=>d.substring(5)),
-      datasets:[
-        { label:'Crime Incidents',data:crimesByDay,
-          borderColor:PALETTE.red, backgroundColor:'rgba(255,46,77,0.08)',
-          borderWidth:2, fill:true, tension:0.4, pointRadius:0, yAxisID:'y' },
-        { label:'Network Threats',data:threatsByDay,
-          borderColor:PALETTE.cyan, backgroundColor:'rgba(0,245,255,0.08)',
-          borderWidth:2, fill:true, tension:0.4, pointRadius:0, yAxisID:'y1' }
-      ]
-    },{
-      scales:{
-        y:{ type:'linear',position:'left',ticks:{color:'var(--red)',callback:v=>v+' c'},
-            grid:{color:'rgba(255,46,77,0.05)'} },
-        y1:{ type:'linear',position:'right',ticks:{color:PALETTE.cyan,callback:v=>v+' t'},
-             grid:{drawOnChartArea:false} },
-        x:{ ticks:{color:'#6a8aaa'} }
-      }
-    });
-  }
-
-  // Radar
-  {
-    const crimeTypes = [...new Set(c.map(x=>x.crime_type))];
-    const openData = crimeTypes.map(t=>c.filter(x=>x.crime_type===t&&x.status==='Open').length);
-    const closedData = crimeTypes.map(t=>c.filter(x=>x.crime_type===t&&x.status==='Closed').length);
-    makeChart('radarChart','radar',{
-      labels:crimeTypes,
-      datasets:[
-        { label:'Open',data:openData,
-          borderColor:PALETTE.red, backgroundColor:'rgba(255,46,77,0.15)',
-          borderWidth:2, pointBackgroundColor:PALETTE.red },
-        { label:'Closed',data:closedData,
-          borderColor:PALETTE.green, backgroundColor:'rgba(0,255,136,0.15)',
-          borderWidth:2, pointBackgroundColor:PALETTE.green }
-      ]
-    });
-  }
-
-  // Stacked bar: status by crime type
-  {
-    const types = [...new Set(c.map(x=>x.crime_type))];
-    const statuses = ['Open','Under Investigation','Closed'];
-    const colors = [PALETTE.red, PALETTE.amber, PALETTE.green];
-    makeChart('stackedChart','bar',{
-      labels:types,
-      datasets:statuses.map((st,i)=>({
-        label:st,
-        data:types.map(t=>c.filter(x=>x.crime_type===t&&x.status===st).length),
-        backgroundColor:colors[i]+'cc', borderRadius:0, borderWidth:0
-      }))
-    },{scales:{x:{stacked:true},y:{stacked:true}}});
-  }
-
-  // Polar: suspect age groups vs risk
-  {
-    const groups = ['18-25','26-35','36-45','46-55','56-65'];
-    const ranges = [[18,25],[26,35],[36,45],[46,55],[56,65]];
-    const highCounts = ranges.map(([a,b])=>s.filter(x=>x.age>=a&&x.age<=b&&x.risk_level==='High').length);
-    makeChart('polarChart','polarArea',{
-      labels:groups,
-      datasets:[{ data:highCounts,
-        backgroundColor:CHART_COLORS.slice(0,5).map(c=>c+'bb'),
-        borderColor:CHART_COLORS.slice(0,5), borderWidth:1 }]
-    });
-  }
-
-  // Network relationship graph (canvas)
-  drawNetworkGraph();
-}
-
-// ---- NETWORK GRAPH ----
-function drawNetworkGraph() {
-  const canvas = document.getElementById('networkCanvas');
-  if (!canvas) return;
-  const s = DATA.suspects.slice(0,20);
-  const c = DATA.crimes.slice(0,15);
-  
-  canvas.width = canvas.offsetWidth || 800;
-  canvas.height = 400;
-  const ctx = canvas.getContext('2d');
-  
-  // Build nodes
-  const nodes = [];
-  const centerX = canvas.width/2, centerY = canvas.height/2;
-  
-  // Central node
-  nodes.push({x:centerX,y:centerY,r:16,label:'HUB',color:'#00f5ff',type:'hub'});
-  
-  s.forEach((sus,i)=>{
-    const angle = (i/s.length)*Math.PI*2;
-    const rad = Math.min(canvas.width,canvas.height)*0.35;
-    const x = centerX + Math.cos(angle)*rad;
-    const y = centerY + Math.sin(angle)*rad;
-    const color = sus.risk_level==='High'?'#ff2e4d':sus.risk_level==='Medium'?'#ffb300':'#00ff88';
-    nodes.push({x,y,r:8,label:sus.suspect_id,color,type:'suspect'});
   });
 
-  function drawFrame() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    
-    // Draw edges
-    nodes.slice(1).forEach((n,i)=>{
-      const alpha = 0.15 + Math.random()*0.05;
-      ctx.beginPath();
-      ctx.moveTo(nodes[0].x, nodes[0].y);
-      ctx.lineTo(n.x, n.y);
-      ctx.strokeStyle = n.color + '44';
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
-      
-      // Some cross-connections
-      if (i>0 && i%3===0) {
-        const prev = nodes[i-1];
-        ctx.beginPath();
-        ctx.moveTo(prev.x, prev.y);
-        ctx.lineTo(n.x, n.y);
-        ctx.strokeStyle = '#0ff2';
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    });
-    
-    // Draw nodes
-    nodes.forEach(n=>{
-      // Glow
-      const grad = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
-      grad.addColorStop(0,n.color+'33');
-      grad.addColorStop(1,'transparent');
-      ctx.beginPath();
-      ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-      
-      // Node circle
-      ctx.beginPath();
-      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-      ctx.fillStyle = n.color+'44';
-      ctx.fill();
-      ctx.strokeStyle = n.color;
-      ctx.lineWidth = n.type==='hub'?2:1.5;
-      ctx.stroke();
-      
-      // Label
-      ctx.fillStyle = n.color;
-      ctx.font = n.type==='hub'?'bold 11px Rajdhani':'9px Share Tech Mono';
-      ctx.textAlign = 'center';
-      ctx.fillText(n.label, n.x, n.y+n.r+12);
-    });
+  html += '</tbody></table></div>';
+  document.getElementById('table-container').innerHTML = html;
+}
+
+function filterTable() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  if (!q) { renderTable(allRows); return; }
+  const filtered = allRows.filter(r =>
+    (r['Full Name']||'').toLowerCase().includes(q) ||
+    (r['Email']||'').toLowerCase().includes(q) ||
+    (r['Designation (if applicable)']||'').toLowerCase().includes(q) ||
+    (r['Contact Number']||'').includes(q)
+  );
+  renderTable(filtered);
+}
+
+async function fetchData() {
+  document.getElementById('status-msg').textContent = 'Fetching latest data…';
+  document.getElementById('last-update').textContent = 'Refreshing…';
+
+  try {
+    const res = await fetch(CSV_URL + '&t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    allRows = parseCSV(text);
+
+    const total = allRows.length;
+    const males = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'male').length;
+    const females = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'female').length;
+    const desigs = new Set(allRows.map(r => (r['Designation (if applicable)']||'').trim().toLowerCase()).filter(Boolean)).size;
+
+    document.getElementById('s-total').textContent = total;
+    document.getElementById('s-male').textContent = males;
+    document.getElementById('s-female').textContent = females;
+    document.getElementById('s-desig').textContent = desigs;
+
+    const now = new Date();
+    const ts = now.toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('last-update').textContent = 'Updated ' + ts;
+    document.getElementById('status-msg').textContent = `Live data · ${total} registrations loaded`;
+    document.getElementById('total-count').textContent = `${total} records`;
+
+    renderCharts(allRows);
+    renderTable(allRows);
+
+  } catch (err) {
+    document.getElementById('status-msg').textContent = '⚠ Could not fetch data. Check sheet permissions or network.';
+    document.getElementById('last-update').textContent = 'Error';
+    document.getElementById('table-container').innerHTML = `<div class="loading" style="flex-direction:column;gap:8px;">
+      <span style="font-size:20px">⚠</span>
+      <span>Failed to load: ${err.message}</span>
+      <span style="font-size:11px;color:var(--muted)">Ensure the Google Sheet is published (File → Share → Publish to web)</span>
+    </div>`;
   }
-  
-  drawFrame();
-  
-  // Resize on window resize
-  window.addEventListener('resize', ()=>{
-    canvas.width = canvas.offsetWidth || 800;
-    drawFrame();
-  });
 }
 
-// ---- PAGINATION ----
-function renderPagination(containerId, total, current, onClick) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  const totalPages = Math.ceil(total/PAGE_SIZE);
-  if (totalPages<=1) { el.innerHTML=''; return; }
-  
-  let html = '';
-  html += `<button class="page-btn" onclick="(${onClick.toString()})(${Math.max(1,current-1)})" ${current===1?'disabled':''}>‹</button>`;
-  
-  const range = [];
-  if (totalPages<=7) {
-    for (let i=1;i<=totalPages;i++) range.push(i);
-  } else {
-    range.push(1);
-    if (current>3) range.push('...');
-    for (let i=Math.max(2,current-1);i<=Math.min(totalPages-1,current+1);i++) range.push(i);
-    if (current<totalPages-2) range.push('...');
-    range.push(totalPages);
-  }
-  
-  range.forEach(p=>{
-    if (p==='...') html += `<span style="color:var(--text-muted);padding:0 4px;">…</span>`;
-    else html += `<button class="page-btn ${p===current?'active':''}" onclick="(${onClick.toString()})(${p})">${p}</button>`;
-  });
-  
-  html += `<button class="page-btn" onclick="(${onClick.toString()})(${Math.min(totalPages,current+1)})" ${current===totalPages?'disabled':''}>›</button>`;
-  el.innerHTML = html;
-}
-
-// ---- TABLE SORT ----
-function sortTable(tableId, colIdx) {
-  const key = tableId+'_'+colIdx;
-  sortStates[key] = !sortStates[key];
-  const asc = sortStates[key];
-  
-  const map = {
-    'crimes-table': {data:'filteredCrimes', fn: renderCrimesTable},
-    'suspects-table': {data:'filteredSuspects', fn: renderSuspectsTable},
-    'network-table': {data:'filteredNetwork', fn: renderNetworkTable}
-  };
-  
-  // Simple sort on displayed data
-  const tbody = document.getElementById(tableId)?.querySelector('tbody');
-  if (!tbody) return;
-  const rows = Array.from(tbody.querySelectorAll('tr'));
-  rows.sort((a,b)=>{
-    const av = a.cells[colIdx]?.textContent.trim()||'';
-    const bv = b.cells[colIdx]?.textContent.trim()||'';
-    const an = parseFloat(av.replace(/[₹,]/g,'')), bn = parseFloat(bv.replace(/[₹,]/g,''));
-    if (!isNaN(an)&&!isNaN(bn)) return asc?an-bn:bn-an;
-    return asc?av.localeCompare(bv):bv.localeCompare(av);
-  });
-  rows.forEach(r=>tbody.appendChild(r));
-}
-
-// ---- EXPORT ----
-function exportChart(chartId) {
-  const chart = CHARTS[chartId];
-  if (!chart) { showToast('warning','Export','Chart not found.'); return; }
-  const a = document.createElement('a');
-  a.href = chart.toBase64Image();
-  a.download = `${chartId}_${Date.now()}.png`;
-  a.click();
-  showToast('success','Chart Exported','PNG saved successfully.');
-}
-
-function exportTableCSV(tableId, filename) {
-  const table = document.getElementById(tableId);
-  if (!table) return;
-  const rows = Array.from(table.querySelectorAll('tr'));
-  const csv = rows.map(r=>
-    Array.from(r.cells).map(c=>'"'+c.textContent.trim().replace(/"/g,'""')+'"').join(',')
-  ).join('\n');
-  const blob = new Blob([csv],{type:'text/csv'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename+'.csv';
-  a.click();
-  showToast('success','CSV Exported',`${filename}.csv saved.`);
-}
-
-// ---- FULLSCREEN CHART ----
-function closeFullscreen() {
-  document.getElementById('fullscreen-modal').classList.remove('active');
-}
-
-// ---- TOAST ----
-let toastId = 0;
-function showToast(type, title, msg) {
-  const icons = {danger:'⚠', success:'✓', info:'ℹ', warning:'!'};
-  const colors = {danger:'var(--red)',success:'var(--green)',info:'var(--cyan)',warning:'var(--amber)'};
-  const container = document.getElementById('toast-container');
-  const id = 'toast-'+toastId++;
-  const el = document.createElement('div');
-  el.className = `toast-item ${type}`;
-  el.id = id;
-  el.innerHTML = `
-    <span class="toast-icon" style="color:${colors[type]}">${icons[type]}</span>
-    <div><div class="toast-title">${title}</div><div class="toast-msg">${msg}</div></div>`;
-  container.appendChild(el);
-  setTimeout(()=>{ el.classList.add('fading'); setTimeout(()=>el.remove(),300); }, 4000);
-}
-
-// ---- REFRESH SIM ----
-function refreshSimulation() {
-  showToast('info','Refreshing','Updating threat intelligence feed...');
-  // Simulate slight data mutation
-  DATA.crimes.forEach(c=>{ if(Math.random()<0.05) c.status = STATUSES[ri(0,2)]; });
-  updateKPIs();
-  renderDashboardCharts();
-  renderRecentTable();
-  setTimeout(()=>showToast('success','Updated','Dashboard synchronized with latest data.'),1200);
-}
-
-// ---- GLOBAL SEARCH ----
-document.getElementById('global-search')?.addEventListener('input', function() {
-  const q = this.value.toLowerCase();
-  if (!q) return;
-  const crimeMatch = DATA.crimes.filter(r=>Object.values(r).some(v=>String(v).toLowerCase().includes(q)));
-  const netMatch = DATA.network.filter(r=>Object.values(r).some(v=>String(v).toLowerCase().includes(q)));
-  if (crimeMatch.length || netMatch.length) {
-    showToast('info','Search Results',`Found ${crimeMatch.length} crimes, ${netMatch.length} network logs for "${q}"`);
-  }
-});
-
-// ---- AUTO REFRESH SIMULATION ----
-let autoRefreshInterval;
-function startAutoRefresh() {
-  autoRefreshInterval = setInterval(()=>{
-    const alerts = [
-      `New threat detected from ${randomIP()} — Phishing attempt`,
-      `Suspicious login from ${randomIP()} — ${LOCATIONS[ri(0,LOCATIONS.length-1)]}`,
-      `High-risk suspect S${ri(1,200).toString().padStart(3,'0')} activity detected`,
-      `Network anomaly — ${ri(100,5000)} bytes from ${randomIP()}`,
-      `UPI Fraud attempt blocked — ₹${ri(1000,50000).toLocaleString()}`
-    ];
-    const msg = alerts[ri(0,alerts.length-1)];
-    if (Math.random() < 0.3) showToast('danger','LIVE ALERT', msg);
-  }, 12000);
-}
-
-// ---- INIT ----
-(function main() {
-  // Load mock data by default
-  DATA.crimes  = generateMockCrimes(500);
-  DATA.network = generateMockNetwork(500);
-  DATA.suspects = generateMockSuspects(200);
-  
-  startClock();
-  initAll();
-  startAutoRefresh();
-  
-  // Typing animation on section title (just for fun)
-  const titleEl = document.querySelector('.section-title');
-  
-  // Show welcome toast
-  setTimeout(()=>{
-    showToast('info','CyberWatch SOC','Dashboard initialized with sample data. Upload your CSV files to analyze real data.');
-  }, 1000);
-  setTimeout(()=>{
-    showToast('danger','Threat Alert',`High-risk activity detected from ${randomIP()}`);
-  }, 3500);
-  
-  // Keyboard shortcuts
-  document.addEventListener('keydown', e=>{
-    if (e.key==='Escape') closeFullscreen();
-  });
-  
-  window.addEventListener('resize', ()=>{
-    Object.values(CHARTS).forEach(c=>{
-      if(c&&c.resize) c.resize();
-    });
-  });
-})();
+fetchData();
+setInterval(fetchData, 60000);
 </script>
 </body>
 </html>
