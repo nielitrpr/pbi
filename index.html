@@ -39,7 +39,6 @@
     min-height: 100vh;
   }
 
-  /* ─── Header ─── */
   header {
     background: var(--accent);
     color: #fff;
@@ -62,8 +61,7 @@
     border: 1.5px solid rgba(255,255,255,0.3);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
+    font-size: 20px; flex-shrink: 0;
   }
 
   .header-title { font-size: 16px; font-weight: 600; letter-spacing: 0.01em; }
@@ -110,7 +108,6 @@
     100% { box-shadow: 0 0 0 0 rgba(185,28,28,0); }
   }
 
-  /* ─── Main ─── */
   .main { padding: 24px 32px 32px; max-width: 1440px; margin: 0 auto; }
 
   .status-bar {
@@ -121,7 +118,6 @@
   .status-left { display: flex; align-items: center; gap: 12px; }
   .countdown { color: var(--accent); font-weight: 500; }
 
-  /* ─── Stats ─── */
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
@@ -141,14 +137,11 @@
   }
   .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
 
-  .stat-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
-  .stat-card.blue::before { background: var(--accent); }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .stat-card.blue::before   { background: var(--accent); }
   .stat-card.orange::before { background: var(--accent2); }
-  .stat-card.green::before { background: var(--accent3); }
-  .stat-card.gold::before { background: var(--gold); }
+  .stat-card.green::before  { background: var(--accent3); }
+  .stat-card.gold::before   { background: var(--gold); }
 
   .stat-label {
     font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em;
@@ -158,24 +151,23 @@
     font-size: 30px; font-weight: 700; font-family: var(--mono); line-height: 1;
     transition: all 0.3s;
   }
-  .stat-card.blue .stat-value { color: var(--accent); }
+  .stat-card.blue .stat-value   { color: var(--accent); }
   .stat-card.orange .stat-value { color: var(--accent2); }
-  .stat-card.green .stat-value { color: var(--accent3); }
-  .stat-card.gold .stat-value { color: var(--gold); }
+  .stat-card.green .stat-value  { color: var(--accent3); }
+  .stat-card.gold .stat-value   { color: var(--gold); }
 
   .stat-value.flash { animation: flash-val 0.6s ease; }
   @keyframes flash-val {
-    0% { opacity: 0.3; transform: scale(0.95); }
-    50% { opacity: 1; transform: scale(1.06); }
+    0%   { opacity: 0.3; transform: scale(0.95); }
+    50%  { opacity: 1;   transform: scale(1.06); }
     100% { transform: scale(1); }
   }
 
   .stat-sub { font-size: 11px; color: var(--muted); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
   .stat-delta { font-weight: 600; font-size: 11px; }
-  .stat-delta.up { color: var(--accent3); }
-  .stat-delta.same { color: var(--muted); }
+  .stat-delta.up    { color: var(--accent3); }
+  .stat-delta.same  { color: var(--muted); }
 
-  /* ─── Charts ─── */
   .charts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -198,7 +190,6 @@
   }
   .chart-title i { font-size: 12px; opacity: 0.5; }
 
-  /* ─── Table ─── */
   .table-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -260,7 +251,6 @@
     text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
     border-bottom: 1px solid var(--border);
     white-space: nowrap; cursor: pointer; user-select: none;
-    position: relative;
     transition: background 0.1s;
   }
   th:hover { background: #e8e5df; }
@@ -279,12 +269,11 @@
     display: inline-block; padding: 2px 8px; border-radius: 4px;
     font-size: 11px; font-weight: 500; font-family: var(--mono);
   }
-  .badge-m { background: #dbeafe; color: #1e3a8a; }
-  .badge-f { background: #fce7f3; color: #9d174d; }
+  .badge-m     { background: #dbeafe; color: #1e3a8a; }
+  .badge-f     { background: #fce7f3; color: #9d174d; }
   .badge-other { background: #f3f4f6; color: #4b5563; }
-  .badge-qual { background: #d1fae5; color: #064e3b; }
+  .badge-qual  { background: #d1fae5; color: #064e3b; }
 
-  /* ─── Pagination ─── */
   .pagination {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px 20px; border-top: 1px solid var(--border);
@@ -299,7 +288,7 @@
     background: var(--surface); cursor: pointer; font-size: 12px;
     font-family: var(--mono); color: var(--muted); transition: all 0.15s;
   }
-  .page-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .page-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
   .page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .page-btn:disabled { opacity: 0.35; pointer-events: none; }
 
@@ -309,7 +298,6 @@
     cursor: pointer;
   }
 
-  /* ─── Loading / Error ─── */
   .loading {
     display: flex; align-items: center; justify-content: center;
     height: 180px; color: var(--muted); font-size: 13px;
@@ -329,9 +317,8 @@
     text-align: center; padding: 20px;
   }
   .error-box i { font-size: 28px; color: var(--accent2); }
-  .error-box .hint { font-size: 11px; color: #999; max-width: 400px; }
+  .error-box .hint { font-size: 11px; color: #999; max-width: 440px; line-height: 1.5; }
 
-  /* ─── Toast ─── */
   .toast {
     position: fixed; bottom: 24px; right: 24px;
     background: var(--accent); color: #fff;
@@ -339,12 +326,10 @@
     font-size: 13px; font-family: var(--mono);
     box-shadow: 0 6px 20px rgba(30,58,95,0.3);
     transform: translateY(80px); opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 200;
+    transition: all 0.3s ease; z-index: 200;
   }
   .toast.show { transform: translateY(0); opacity: 1; }
 
-  /* ─── Footer ─── */
   footer {
     text-align: center; padding: 18px;
     font-size: 11px; font-family: var(--mono); color: var(--muted);
@@ -353,7 +338,6 @@
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
-  /* ─── Responsive ─── */
   @media (max-width: 1024px) {
     .charts-grid { grid-template-columns: 1fr 1fr; }
   }
@@ -409,7 +393,7 @@
     <span id="total-count" style="font-weight:500;"></span>
   </div>
 
-  <div class="stats-grid" id="stats-grid">
+  <div class="stats-grid">
     <div class="stat-card blue">
       <div class="stat-label">Total Registrations</div>
       <div class="stat-value" id="s-total">—</div>
@@ -486,60 +470,53 @@
 </footer>
 
 <script>
-/* ═══════════════════════════════════════════════
-   CONFIG
-   ═══════════════════════════════════════════════ */
-const SHEET_ID = "1X_Chv3xMYSZPQokTfH9ft5bI4Pba1fN1H-Uxj8xSXqc";
-const CSV_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-const REFRESH_SEC = 60;
-const PAGE_SIZES = [25, 50, 100, 200];
+/* ═══════════════════════════════════
+   Use the published /pub URL — this
+   works without any Google login.
+   ═══════════════════════════════════ */
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQNfxa5VZ-8AVpLuwKLqFcfGhpgd3blrWz9UzxNozWBVjItXNBjlkvZzPXnNF06VKwIwjUmYvK_FTyf/pub?output=csv";
 
-/* ═══════════════════════════════════════════════
-   STATE
-   ═══════════════════════════════════════════════ */
+const REFRESH_SEC = 60;
+const PAGE_SIZES  = [25, 50, 100, 200];
+
+/* State */
 let allRows      = [];
 let filteredRows = [];
 let prevTotal    = 0;
 let charts       = {};
 let sortCol      = -1;
-let sortDir      = 1;           // 1 = asc, -1 = desc
+let sortDir      = 1;
 let currentPage  = 1;
 let pageSize     = 50;
 let countdownId  = null;
 let countdownVal = REFRESH_SEC;
 
-/* Table columns definition */
+/* Column definitions */
 const COLS = [
-  { key: 'Full Name',           label: 'Name',         w: '170px',  numeric: false },
-  { key: 'Father Name',         label: 'Father',       w: '130px',  numeric: false },
-  { key: 'Gender',              label: 'Gender',       w: '70px',   numeric: false },
-  { key: 'Qual',                label: 'Qualification',w: '150px',  numeric: false },
-  { key: 'Designation (if applicable)', label: 'Designation', w: '160px', numeric: false },
-  { key: 'Email',               label: 'Email',        w: '190px',  numeric: false },
-  { key: 'Contact Number',      label: 'Contact',      w: '120px',  numeric: false },
-  { key: 'Timestamp',           label: 'Registered',   w: '110px',  numeric: false },
+  { key: 'Full Name',                              label: 'Name',          w: '170px', numeric: false },
+  { key: 'Father Name',                            label: 'Father',        w: '130px', numeric: false },
+  { key: 'Gender',                                 label: 'Gender',        w: '70px',  numeric: false },
+  { key: 'Qual',                                   label: 'Qualification', w: '150px', numeric: false },
+  { key: 'Designation (if applicable)',            label: 'Designation',   w: '160px', numeric: false },
+  { key: 'Email',                                  label: 'Email',         w: '190px', numeric: false },
+  { key: 'Contact Number',                         label: 'Contact',       w: '120px', numeric: false },
+  { key: 'Timestamp',                              label: 'Registered',    w: '110px', numeric: false },
 ];
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
    ROBUST CSV PARSER
-   Handles quoted fields with embedded commas,
-   newlines, and escaped quotes.
-   ═══════════════════════════════════════════════ */
+   ═══════════════════════════════════ */
 function parseCSV(text) {
   const rows = [];
   let row = [], field = '', inQ = false;
 
   for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    const next = text[i + 1];
-
+    const c = text[i], next = text[i + 1];
     if (inQ) {
       if (c === '"') {
-        if (next === '"') { field += '"'; i++; }   // escaped quote
-        else { inQ = false; }                       // end of quoted field
-      } else {
-        field += c;
-      }
+        if (next === '"') { field += '"'; i++; }
+        else { inQ = false; }
+      } else { field += c; }
     } else {
       if (c === '"') { inQ = true; }
       else if (c === ',') { row.push(field); field = ''; }
@@ -548,18 +525,17 @@ function parseCSV(text) {
       else { field += c; }
     }
   }
-  // last field / row
   if (field || row.length) { row.push(field); rows.push(row); }
-
   if (rows.length < 2) return [];
 
   const headers = rows[0].map(h => h.trim().replace(/^"|"$/g, ''));
+  const nameIdx = headers.indexOf('Full Name');
+
   return rows.slice(1)
-    .filter(r => r.length >= headers.length && (r[headers.indexOf('Full Name')] || '').trim().length > 0)
+    .filter(r => r.length >= headers.length && (r[nameIdx >= 0 ? nameIdx : 0] || '').trim().length > 0)
     .map(r => {
       const obj = {};
       headers.forEach((h, i) => obj[h] = (r[i] || '').trim().replace(/^"|"$/g, ''));
-      // Normalise qualification into shorter field
       obj.Qual = normalizeQual(obj['Highest/Current Qualification (with Branch /domain as applicable)'] || '');
       return obj;
     });
@@ -567,29 +543,29 @@ function parseCSV(text) {
 
 function normalizeQual(raw) {
   const s = raw.toLowerCase();
-  if (/m\.?tech/.test(s)) return 'M.Tech';
-  if (/m\.?sc/.test(s))  return 'M.Sc';
-  if (/mca/.test(s))     return 'MCA';
-  if (/m\.?a/.test(s))   return 'M.A';
-  if (/m\.?com/.test(s)) return 'M.Com';
-  if (/b\.?tech/.test(s)) return 'B.Tech';
-  if (/b\.?sc/.test(s))  return 'B.Sc';
-  if (/bca/.test(s))     return 'BCA';
-  if (/b\.?a/.test(s))   return 'B.A';
-  if (/b\.?com/.test(s)) return 'B.Com';
-  if (/phd/.test(s))     return 'PhD';
-  if (/diploma/.test(s)) return 'Diploma';
-  if (/12th|12\s/.test(s) || /intermediate/.test(s) || /\+2/.test(s)) return '12th';
-  if (/10th|10\s/.test(s) || /matric/.test(s)) return '10th';
-  if (/mba/.test(s))     return 'MBA';
-  if (/llb/.test(s))     return 'LLB';
+  if (/m\.?tech/.test(s))     return 'M.Tech';
+  if (/m\.?sc/.test(s))      return 'M.Sc';
+  if (/mca/.test(s))         return 'MCA';
+  if (/m\.?a(?!\w)/.test(s)) return 'M.A';
+  if (/m\.?com/.test(s))     return 'M.Com';
+  if (/mba/.test(s))         return 'MBA';
+  if (/llb/.test(s))         return 'LLB';
+  if (/phd/.test(s))         return 'PhD';
+  if (/b\.?tech/.test(s))    return 'B.Tech';
+  if (/b\.?sc/.test(s))      return 'B.Sc';
+  if (/bca/.test(s))         return 'BCA';
+  if (/b\.?a(?!\w)/.test(s)) return 'B.A';
+  if (/b\.?com/.test(s))     return 'B.Com';
+  if (/diploma/.test(s))     return 'Diploma';
+  if (/12th|12\s|\+2|intermediate|10\+2/.test(s)) return '12th';
+  if (/10th|10\s|matric/.test(s)) return '10th';
   return raw.length > 20 ? raw.substring(0, 18) + '…' : (raw || 'Other');
 }
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
    CHARTS
-   ═══════════════════════════════════════════════ */
-function makeChart(id, type, labels, data, colors, borderColors) {
+   ═══════════════════════════════════ */
+function makeChart(id, type, labels, data, colors) {
   if (charts[id]) charts[id].destroy();
   const ctx = document.getElementById(id);
   if (!ctx || !data.length) return;
@@ -602,29 +578,24 @@ function makeChart(id, type, labels, data, colors, borderColors) {
       datasets: [{
         data,
         backgroundColor: colors,
-        borderColor: borderColors || (type === 'doughnut' ? '#ffffff' : colors),
+        borderColor: type === 'doughnut' ? '#ffffff' : colors,
         borderWidth: type === 'doughnut' ? 2.5 : 1,
         borderRadius: type === 'bar' ? 4 : 0,
         maxBarThickness: 36,
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       animation: { duration: 500, easing: 'easeOutQuart' },
       plugins: {
         legend: {
-          display: type === 'doughnut',
-          position: 'bottom',
+          display: type === 'doughnut', position: 'bottom',
           labels: {
             font: { size: 11, family: 'IBM Plex Mono' },
             boxWidth: 10, padding: 10,
             generateLabels: chart => chart.data.labels.map((l, i) => ({
-              text: `${l}  ${data[i]}  (${Math.round(data[i]/total*100)}%)`,
-              fillStyle: colors[i],
-              strokeStyle: '#fff',
-              lineWidth: 2,
-              index: i,
+              text: `${l}  ${data[i]}  (${total ? Math.round(data[i]/total*100) : 0}%)`,
+              fillStyle: colors[i], strokeStyle: '#fff', lineWidth: 2, index: i,
             }))
           }
         },
@@ -633,21 +604,12 @@ function makeChart(id, type, labels, data, colors, borderColors) {
           titleFont: { family: 'IBM Plex Sans', size: 12 },
           bodyFont: { family: 'IBM Plex Mono', size: 12 },
           padding: 10,
-          callbacks: {
-            label: ctx => ` ${ctx.raw}  (${Math.round(ctx.raw / total * 100)}%)`
-          }
+          callbacks: { label: c => ` ${c.raw}  (${total ? Math.round(c.raw/total*100) : 0}%)` }
         }
       },
       scales: type === 'bar' ? {
-        y: {
-          beginAtZero: true,
-          ticks: { stepSize: 1, font: { size: 10, family: 'IBM Plex Mono' } },
-          grid: { color: '#e8e5e0' }
-        },
-        x: {
-          ticks: { font: { size: 9, family: 'IBM Plex Mono' }, maxRotation: 35 },
-          grid: { display: false }
-        }
+        y: { beginAtZero: true, ticks: { stepSize: 1, font: { size: 10, family: 'IBM Plex Mono' } }, grid: { color: '#e8e5e0' } },
+        x: { ticks: { font: { size: 9, family: 'IBM Plex Mono' }, maxRotation: 35 }, grid: { display: false } }
       } : {},
       ...(type === 'doughnut' ? { cutout: '55%' } : {})
     }
@@ -658,24 +620,22 @@ function renderCharts(rows) {
   /* Gender */
   const gc = {};
   rows.forEach(r => { const g = r['Gender'] || 'Unknown'; gc[g] = (gc[g] || 0) + 1; });
-  const gLabels = Object.keys(gc);
-  const gData   = Object.values(gc);
-  const gColors = gLabels.map(l => {
-    const ll = l.toLowerCase();
-    if (ll === 'male')   return '#1e3a5f';
-    if (ll === 'female') return '#c8440a';
-    return '#6b6860';
-  });
-  makeChart('chartGender', 'doughnut', gLabels, gData, gColors);
+  makeChart('chartGender', 'doughnut',
+    Object.keys(gc), Object.values(gc),
+    Object.keys(gc).map(l => {
+      const ll = l.toLowerCase();
+      if (ll === 'male') return '#1e3a5f';
+      if (ll === 'female') return '#c8440a';
+      return '#6b6860';
+    })
+  );
 
   /* Qualification */
   const qc = {};
   rows.forEach(r => { const q = r.Qual || 'Other'; qc[q] = (qc[q] || 0) + 1; });
-  const qSorted = Object.entries(qc).sort((a, b) => b[1] - a[1]).slice(0, 7);
-  makeChart('chartQual', 'bar',
-    qSorted.map(e => e[0]), qSorted.map(e => e[1]),
-    ['#1e3a5f', '#2a5298', '#3a6aaa', '#4a7fbb', '#1a6b3c', '#c8440a', '#b8860b']
-  );
+  const qs = Object.entries(qc).sort((a, b) => b[1] - a[1]).slice(0, 7);
+  makeChart('chartQual', 'bar', qs.map(e => e[0]), qs.map(e => e[1]),
+    ['#1e3a5f','#2a5298','#3a6aaa','#4a7fbb','#1a6b3c','#c8440a','#b8860b']);
 
   /* Designation */
   const dc = {};
@@ -684,115 +644,91 @@ function renderCharts(rows) {
     if (d.length > 20) d = d.substring(0, 18) + '…';
     dc[d] = (dc[d] || 0) + 1;
   });
-  const dSorted = Object.entries(dc).sort((a, b) => b[1] - a[1]).slice(0, 7);
-  makeChart('chartDesig', 'bar',
-    dSorted.map(e => e[0]), dSorted.map(e => e[1]),
-    ['#c8440a', '#d45a1f', '#e06f3a', '#e88455', '#f0a07a', '#1a6b3c', '#b8860b']
-  );
+  const ds = Object.entries(dc).sort((a, b) => b[1] - a[1]).slice(0, 7);
+  makeChart('chartDesig', 'bar', ds.map(e => e[0]), ds.map(e => e[1]),
+    ['#c8440a','#d45a1f','#e06f3a','#e88455','#f0a07a','#1a6b3c','#b8860b']);
 }
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
    TABLE
-   ═══════════════════════════════════════════════ */
+   ═══════════════════════════════════ */
 function getPage() {
-  const start = (currentPage - 1) * pageSize;
-  return filteredRows.slice(start, start + pageSize);
+  const s = (currentPage - 1) * pageSize;
+  return filteredRows.slice(s, s + pageSize);
 }
-
-function totalPages() {
-  return Math.max(1, Math.ceil(filteredRows.length / pageSize));
-}
+function totalPages() { return Math.max(1, Math.ceil(filteredRows.length / pageSize)); }
 
 function renderTable() {
   const container = document.getElementById('table-container');
   document.getElementById('record-count').textContent = filteredRows.length + ' of ' + allRows.length;
 
   if (!filteredRows.length) {
-    container.innerHTML = '<div class="error-box"><i class="fas fa-search"></i>No matching records found.<div class="hint">Try a different search term.</div></div>';
+    container.innerHTML = '<div class="error-box"><i class="fas fa-search"></i>No matching records.<div class="hint">Try a different search term.</div></div>';
     return;
   }
 
   const page = getPage();
-  let html = '<div class="table-wrap"><table><thead><tr>';
-
+  let h = '<div class="table-wrap"><table><thead><tr>';
   COLS.forEach((c, i) => {
     const sorted = sortCol === i;
     const arrow  = sorted ? (sortDir === 1 ? '▲' : '▼') : '⇅';
-    html += `<th style="width:${c.w}" class="${sorted ? 'sorted' : ''}" onclick="onSort(${i})" role="columnheader" aria-sort="${sorted ? (sortDir===1?'ascending':'descending') : 'none'}">
-      ${c.label}<span class="sort-icon">${arrow}</span></th>`;
+    h += `<th style="width:${c.w}" class="${sorted?'sorted':''}" onclick="onSort(${i})">${c.label}<span class="sort-icon">${arrow}</span></th>`;
   });
-  html += '</tr></thead><tbody>';
+  h += '</tr></thead><tbody>';
 
   page.forEach(r => {
     const g = (r['Gender'] || '').toLowerCase();
-    const gBadge = g === 'female' ? 'badge-f' : g === 'male' ? 'badge-m' : 'badge-other';
+    const gb = g === 'female' ? 'badge-f' : g === 'male' ? 'badge-m' : 'badge-other';
     const ts = r['Timestamp'] ? r['Timestamp'].replace('T', ' ').split('.')[0].substring(0, 16) : '—';
-    let qual = r.Qual || '—';
 
-    html += `<tr>
-      <td><strong>${esc(r['Full Name'] || '—')}</strong></td>
-      <td style="color:var(--muted)">${esc(r['Father Name'] || '—')}</td>
-      <td><span class="badge ${gBadge}">${esc(r['Gender'] || '—')}</span></td>
-      <td><span class="badge badge-qual">${esc(qual)}</span></td>
-      <td>${esc(r['Designation (if applicable)'] || '—')}</td>
-      <td style="color:var(--accent);font-family:var(--mono);font-size:12px">${esc(r['Email'] || '—')}</td>
-      <td style="font-family:var(--mono);font-size:12px">${esc(r['Contact Number'] || '—')}</td>
+    h += `<tr>
+      <td><strong>${esc(r['Full Name']||'—')}</strong></td>
+      <td style="color:var(--muted)">${esc(r['Father Name']||'—')}</td>
+      <td><span class="badge ${gb}">${esc(r['Gender']||'—')}</span></td>
+      <td><span class="badge badge-qual">${esc(r.Qual||'—')}</span></td>
+      <td>${esc(r['Designation (if applicable)']||'—')}</td>
+      <td style="color:var(--accent);font-family:var(--mono);font-size:12px">${esc(r['Email']||'—')}</td>
+      <td style="font-family:var(--mono);font-size:12px">${esc(r['Contact Number']||'—')}</td>
       <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${ts}</td>
     </tr>`;
   });
 
-  html += '</tbody></table></div>';
+  h += '</tbody></table></div>';
 
   /* Pagination */
   const tp = totalPages();
   const start = (currentPage - 1) * pageSize + 1;
   const end   = Math.min(currentPage * pageSize, filteredRows.length);
 
-  html += `<div class="pagination">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <span>Rows ${start}–${end} of ${filteredRows.length}</span>
-      <select class="per-page-select" onchange="changePageSize(this.value)" aria-label="Rows per page">
-        ${PAGE_SIZES.map(s => `<option value="${s}" ${s===pageSize?'selected':''}>${s}/page</option>`).join('')}
-      </select>
-    </div>
-    <div class="page-btns">
-      <button class="page-btn" onclick="goPage(1)" ${currentPage===1?'disabled':''}><i class="fas fa-angle-double-left"></i></button>
-      <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-angle-left"></i></button>`;
+  h += `<div class="pagination"><div style="display:flex;align-items:center;gap:8px;">
+    <span>Rows ${start}–${end} of ${filteredRows.length}</span>
+    <select class="per-page-select" onchange="changePageSize(this.value)" aria-label="Rows per page">
+      ${PAGE_SIZES.map(s => `<option value="${s}" ${s===pageSize?'selected':''}>${s}/page</option>`).join('')}
+    </select></div><div class="page-btns">
+    <button class="page-btn" onclick="goPage(1)" ${currentPage===1?'disabled':''}><i class="fas fa-angle-double-left"></i></button>
+    <button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}><i class="fas fa-angle-left"></i></button>`;
 
-  /* Page number buttons — show window of 5 around current */
-  let pStart = Math.max(1, currentPage - 2);
-  let pEnd   = Math.min(tp, pStart + 4);
-  if (pEnd - pStart < 4) pStart = Math.max(1, pEnd - 4);
-
-  for (let p = pStart; p <= pEnd; p++) {
-    html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
+  let pS = Math.max(1, currentPage - 2), pE = Math.min(tp, pS + 4);
+  if (pE - pS < 4) pS = Math.max(1, pE - 4);
+  for (let p = pS; p <= pE; p++) {
+    h += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
   }
 
-  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}><i class="fas fa-angle-right"></i></button>
-      <button class="page-btn" onclick="goPage(${tp})" ${currentPage===tp?'disabled':''}><i class="fas fa-angle-double-right"></i></button>
-    </div>
-  </div>`;
+  h += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===tp?'disabled':''}><i class="fas fa-angle-right"></i></button>
+    <button class="page-btn" onclick="goPage(${tp})" ${currentPage===tp?'disabled':''}><i class="fas fa-angle-double-right"></i></button>
+  </div></div>`;
 
-  container.innerHTML = html;
+  container.innerHTML = h;
 }
 
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
-}
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-function onSort(colIdx) {
-  if (sortCol === colIdx) { sortDir *= -1; }
-  else { sortCol = colIdx; sortDir = 1; }
-
-  const key = COLS[colIdx].key;
+function onSort(i) {
+  if (sortCol === i) sortDir *= -1; else { sortCol = i; sortDir = 1; }
+  const key = COLS[i].key;
   filteredRows.sort((a, b) => {
-    let va = (a[key] || '').toLowerCase();
-    let vb = (b[key] || '').toLowerCase();
-    if (va < vb) return -1 * sortDir;
-    if (va > vb) return  1 * sortDir;
-    return 0;
+    const va = (a[key] || '').toLowerCase(), vb = (b[key] || '').toLowerCase();
+    return va < vb ? -1 * sortDir : va > vb ? 1 * sortDir : 0;
   });
   currentPage = 1;
   renderTable();
@@ -806,152 +742,127 @@ function goPage(p) {
   document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function changePageSize(val) {
-  pageSize = parseInt(val, 10);
-  currentPage = 1;
-  renderTable();
-}
+function changePageSize(v) { pageSize = parseInt(v, 10); currentPage = 1; renderTable(); }
 
 function onSearch() {
   const q = document.getElementById('search-input').value.toLowerCase().trim();
-  if (!q) {
-    filteredRows = [...allRows];
-  } else {
-    filteredRows = allRows.filter(r =>
-      (r['Full Name'] || '').toLowerCase().includes(q) ||
-      (r['Father Name'] || '').toLowerCase().includes(q) ||
-      (r['Email'] || '').toLowerCase().includes(q) ||
-      (r['Designation (if applicable)'] || '').toLowerCase().includes(q) ||
-      (r['Contact Number'] || '').includes(q) ||
-      (r.Qual || '').toLowerCase().includes(q) ||
-      (r['Gender'] || '').toLowerCase().includes(q)
-    );
-  }
+  filteredRows = q
+    ? allRows.filter(r =>
+        (r['Full Name']||'').toLowerCase().includes(q) ||
+        (r['Father Name']||'').toLowerCase().includes(q) ||
+        (r['Email']||'').toLowerCase().includes(q) ||
+        (r['Designation (if applicable)']||'').toLowerCase().includes(q) ||
+        (r['Contact Number']||'').includes(q) ||
+        (r.Qual||'').toLowerCase().includes(q) ||
+        (r['Gender']||'').toLowerCase().includes(q))
+    : [...allRows];
   currentPage = 1;
   renderTable();
 }
 
-function clearSearch() {
-  document.getElementById('search-input').value = '';
-  onSearch();
-}
+function clearSearch() { document.getElementById('search-input').value = ''; onSearch(); }
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
    EXPORT
-   ═══════════════════════════════════════════════ */
+   ═══════════════════════════════════ */
 function exportCSV() {
   if (!allRows.length) { showToast('No data to export'); return; }
-  const headers = Object.keys(allRows[0]).filter(k => k !== 'Qual');
-  let csv = headers.map(h => `"${h}"`).join(',') + '\n';
-  allRows.forEach(r => {
-    csv += headers.map(h => `"${(r[h] || '').replace(/"/g, '""')}"`).join(',') + '\n';
-  });
+  const hdrs = Object.keys(allRows[0]).filter(k => k !== 'Qual');
+  let csv = hdrs.map(h => `"${h}"`).join(',') + '\n';
+  allRows.forEach(r => { csv += hdrs.map(h => `"${(r[h]||'').replace(/"/g,'""')}"`).join(',') + '\n'; });
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
+  a.href = URL.createObjectURL(blob);
   a.download = `FSP_Registrations_${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
-  URL.revokeObjectURL(url);
   showToast('Exported ' + allRows.length + ' records');
 }
 
-/* ═══════════════════════════════════════════════
-   TOAST
-   ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════ */
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ═══════════════════════════════════════════════
-   COUNTDOWN
-   ═══════════════════════════════════════════════ */
 function startCountdown() {
   countdownVal = REFRESH_SEC;
   if (countdownId) clearInterval(countdownId);
   const el = document.getElementById('countdown');
+  el.textContent = `Refresh in ${countdownVal}s`;
   countdownId = setInterval(() => {
     countdownVal--;
-    if (countdownVal <= 0) { clearInterval(countdownId); }
-    el.textContent = `Refresh in ${countdownVal}s`;
+    if (countdownVal <= 0) clearInterval(countdownId);
+    else el.textContent = `Refresh in ${countdownVal}s`;
   }, 1000);
 }
 
-/* ═══════════════════════════════════════════════
-   STAT FLASH ANIMATION
-   ═══════════════════════════════════════════════ */
 function flashStat(id) {
   const el = document.getElementById(id);
   el.classList.remove('flash');
-  void el.offsetWidth;  // reflow
+  void el.offsetWidth;
   el.classList.add('flash');
 }
 
-/* ═══════════════════════════════════════════════
-   FETCH
-   ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════
+   FETCH — the critical fix:
+   uses /pub?output=csv (your URL)
+   instead of /export?format=csv
+   ═══════════════════════════════════ */
 async function fetchData() {
-  const refreshBtn = document.getElementById('refresh-btn');
-  refreshBtn.classList.add('loading-state');
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('loading-state');
   document.getElementById('status-msg').textContent = 'Fetching latest data…';
   document.getElementById('last-update').textContent = 'Refreshing…';
   document.getElementById('pulse-dot').classList.remove('error');
 
   try {
-    const res = await fetch(CSV_URL + '&t=' + Date.now(), { cache: 'no-store' });
+    const res = await fetch(CSV_URL + '&_t=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
+
+    if (text.length < 20) throw new Error('Empty response — check publish settings');
+
     allRows = parseCSV(text);
+    if (!allRows.length) throw new Error('Parsed 0 rows — check column headers match');
 
-    if (!allRows.length) throw new Error('Sheet returned 0 parseable rows');
-
-    filteredRows = [...allRows];
-    const query = document.getElementById('search-input').value;
-    if (query) onSearch(); // re-apply filter
+    /* Re-apply current search filter */
+    onSearch();
 
     const total   = allRows.length;
-    const males   = allRows.filter(r => (r['Gender'] || '').toLowerCase() === 'male').length;
-    const females = allRows.filter(r => (r['Gender'] || '').toLowerCase() === 'female').length;
-    const desigs  = new Set(allRows.map(r => (r['Designation (if applicable)'] || '').trim().toLowerCase()).filter(Boolean)).size;
+    const males   = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'male').length;
+    const females = allRows.filter(r => (r['Gender']||'').toLowerCase() === 'female').length;
+    const desigs  = new Set(allRows.map(r => (r['Designation (if applicable)']||'').trim().toLowerCase()).filter(Boolean)).size;
 
-    /* Update stats with flash */
     document.getElementById('s-total').textContent  = total;   flashStat('s-total');
     document.getElementById('s-male').textContent   = males;   flashStat('s-male');
     document.getElementById('s-female').textContent = females; flashStat('s-female');
     document.getElementById('s-desig').textContent  = desigs;  flashStat('s-desig');
 
-    /* Delta */
     const delta = total - prevTotal;
-    const deltaEl = document.getElementById('s-total-delta');
+    const dEl = document.getElementById('s-total-delta');
     if (prevTotal > 0) {
-      if (delta > 0)      deltaEl.innerHTML = `<span class="stat-delta up">+${delta} new</span>`;
-      else if (delta === 0) deltaEl.innerHTML = `<span class="stat-delta same">No change</span>`;
-      else                 deltaEl.innerHTML = `<span class="stat-delta" style="color:var(--accent2)">${delta}</span>`;
-    } else {
-      deltaEl.innerHTML = '';
-    }
+      dEl.innerHTML = delta > 0 ? `<span class="stat-delta up">+${delta} new</span>`
+                   : delta === 0 ? `<span class="stat-delta same">No change</span>`
+                   : `<span class="stat-delta" style="color:var(--accent2)">${delta}</span>`;
+    } else { dEl.innerHTML = ''; }
     prevTotal = total;
 
-    /* Percentages */
-    document.getElementById('s-male-pct').textContent   = total ? Math.round(males / total * 100) + '% of total' : '';
-    document.getElementById('s-female-pct').textContent = total ? Math.round(females / total * 100) + '% of total' : '';
+    document.getElementById('s-male-pct').textContent   = total ? Math.round(males/total*100) + '% of total' : '';
+    document.getElementById('s-female-pct').textContent = total ? Math.round(females/total*100) + '% of total' : '';
 
-    const now = new Date();
-    const ts  = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const ts = new Date().toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     document.getElementById('last-update').textContent = 'Updated ' + ts;
-    document.getElementById('status-msg').textContent  = `Live data · ${total} registrations`;
+    document.getElementById('status-msg').textContent  = 'Live data · ' + total + ' registrations';
     document.getElementById('total-count').textContent  = total + ' records';
 
     renderCharts(allRows);
     renderTable();
     startCountdown();
 
-    if (delta > 0 && prevTotal - delta > 0) {
-      showToast(`+${delta} new registration${delta > 1 ? 's' : ''}`);
-    }
+    if (delta > 0 && prevTotal - delta > 0) showToast('+' + delta + ' new registration' + (delta > 1 ? 's' : ''));
 
   } catch (err) {
     document.getElementById('status-msg').textContent = '⚠ Could not fetch data';
@@ -963,24 +874,26 @@ async function fetchData() {
         <div class="error-box">
           <i class="fas fa-exclamation-triangle"></i>
           <span>Failed to load: ${esc(err.message)}</span>
-          <div class="hint">Ensure the Google Sheet is published:<br>
-          File → Share → Publish to web → Entire Document → CSV<br>
-          Also verify the Sheet ID is correct.</div>
+          <div class="hint">
+            The /pub URL must return CSV.<br>
+            Go to your Google Sheet → File → Share → Publish to web<br>
+            Select "Entire Document" → Format: CSV → Publish<br>
+            Copy the URL and replace CSV_URL in the script.
+          </div>
           <button class="btn" style="color:var(--accent);border-color:var(--accent);margin-top:8px;" onclick="fetchData()">
             <i class="fas fa-redo"></i> Retry
           </button>
         </div>`;
     }
-
     startCountdown();
   }
 
-  refreshBtn.classList.remove('loading-state');
+  btn.classList.remove('loading-state');
 }
 
-/* ═══════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════
+   BOOT
+   ═══════════════════════════════════ */
 fetchData();
 setInterval(fetchData, REFRESH_SEC * 1000);
 </script>
